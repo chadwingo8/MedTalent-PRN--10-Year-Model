@@ -207,7 +207,7 @@ tr.tot td:first-child{color:#fff}
   </div>
   <div><div class="badge">PRN Division - 10 Year Growth Model</div><h1>Medical Talent</h1></div>
 </div>
-<p class="sub">Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +3 employees/year each +24 hrs/wk</p>
+<p class="sub">Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +3 internal hires/year each +24 hrs/wk</p>
 <div class="legend-bar">
   <div class="lg"><div class="lg-dot" style="background:#1E5FA6"></div><span style="color:#1E5FA6">Revenue (money in)</span></div>
   <div class="lg"><div class="lg-dot" style="background:#DC2626"></div><span style="color:#DC2626">Cost of Revenue</span></div>
@@ -241,7 +241,8 @@ tr.tot td:first-child{color:#fff}
     <div class="asmp-row"><label>Bill Rate ($/hr)</label><input type="range" id="sBR" min="25" max="60" step="1" value="33" oninput="updSlider()"><div class="av" id="vBR">$33</div></div>
     <div class="asmp-row"><label>Pay Rate ($/hr)</label><input type="range" id="sPR" min="15" max="50" step="1" value="25" oninput="updSlider()"><div class="av" id="vPR">$25</div></div>
     <div class="asmp-row"><label>2026 Hrs/Wk Growth</label><input type="range" id="sGPW" min="12" max="120" step="12" value="48" oninput="updSlider()"><div class="av" id="vGPW">48 hrs/wk</div></div>
-    <div class="asmp-row"><label>2027+ Total Hrs/Wk Added/Yr</label><input type="range" id="sGPW2" min="12" max="96" step="12" value="72" oninput="updSlider()"><div class="av" id="vGPW2">72 hrs/wk</div></div>
+    <div class="asmp-row"><label>2027+ Internal Hires/Yr</label><input type="range" id="sIHY" min="1" max="20" step="1" value="3" oninput="updSlider()"><div class="av" id="vIHY">3 hires/yr</div></div>
+    <div class="asmp-row"><label>Hrs/Wk per Internal Hire</label><input type="range" id="sHPH" min="12" max="72" step="4" value="24" oninput="updSlider()"><div class="av" id="vHPH">24 hrs/hire</div></div>
     <div class="asmp-row"><label>Bonus Threshold (hrs/wk)</label><input type="range" id="sBTH" min="500" max="4000" step="250" value="2000" oninput="updSlider()"><div class="av" id="vBTH">2,000</div></div>
     <div class="asmp-row"><label>Bonus Pool %</label><input type="range" id="sBPC" min="10" max="50" step="5" value="30" oninput="updSlider()"><div class="av" id="vBPC">30%</div></div>
     <div class="asmp-row"><label>LOC Interest Rate (%)</label><input type="range" id="sLR" min="3" max="15" step="0.5" value="5.5" oninput="updSlider()"><div class="av" id="vLR">5.5%</div></div>
@@ -439,7 +440,7 @@ function updSlider(){
   document.getElementById("vBR").textContent="$"+document.getElementById("sBR").value;
   document.getElementById("vPR").textContent="$"+document.getElementById("sPR").value;
   document.getElementById("vGPW").textContent=document.getElementById("sGPW").value+" hrs/wk";
-  document.getElementById("vGPW2").textContent=document.getElementById("sGPW2").value+" hrs/wk";
+  var _ihy=parseInt(document.getElementById("sIHY").value),_hph=parseInt(document.getElementById("sHPH").value);document.getElementById("vIHY").textContent=_ihy+" hire"+(_ihy!==1?"s":"")+"/yr";document.getElementById("vHPH").textContent=_hph+" hrs/hire";
   document.getElementById("vBTH").textContent=parseInt(document.getElementById("sBTH").value).toLocaleString();
   document.getElementById("vBPC").textContent=document.getElementById("sBPC").value+"%";
   document.getElementById("vLR").textContent=document.getElementById("sLR").value+"%";
@@ -452,8 +453,9 @@ function applyAssumptions(){
   LR=parseFloat(document.getElementById("sLR").value)/100;
   TR=parseInt(document.getElementById("sTR").value)/100;
   var gpw=parseInt(document.getElementById("sGPW").value);
-  var gpw2=parseInt(document.getElementById("sGPW2").value);
+  var _ihyA=parseInt(document.getElementById("sIHY").value),_hphA=parseInt(document.getElementById("sHPH").value),gpw2=_ihyA*_hphA;
   YRS[0].gpw=gpw;for(var i=1;i<YRS.length;i++)YRS[i].gpw=gpw2;
+  var _subEl=document.querySelector("p.sub");if(_subEl){_subEl.textContent="Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +"+_ihyA+" internal hire"+(_ihyA!==1?"s":"")+"/year each +"+_hphA+" hrs/wk";}
   document.getElementById("tBR").textContent="$"+BR+"/hr";
   document.getElementById("tPR").textContent="$"+PR+"/hr";
   document.getElementById("tGM").textContent="$"+GM+"/hr";
@@ -463,7 +465,7 @@ function resetAssumptions(){
   BR=DEF.BR;PR=DEF.PR;GM=BR-PR;BTH=DEF.BTH;BPC=DEF.BPC;LR=DEF.LR;TR=DEF.TR;
   YRS[0].gpw=DEF.GPW;for(var i=1;i<YRS.length;i++)YRS[i].gpw=DEF.GPW2;
   document.getElementById("sBR").value=DEF.BR;document.getElementById("sPR").value=DEF.PR;
-  document.getElementById("sGPW").value=DEF.GPW;document.getElementById("sGPW2").value=DEF.GPW2;
+  document.getElementById("sGPW").value=DEF.GPW;document.getElementById("sIHY").value=3;document.getElementById("sHPH").value=24;
   document.getElementById("sBTH").value=DEF.BTH;document.getElementById("sBPC").value=DEF.BPC*100;
   document.getElementById("sLR").value=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
   updSlider();
