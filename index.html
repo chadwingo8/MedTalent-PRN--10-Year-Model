@@ -680,10 +680,7 @@ function sendQA(){
   var systemPrompt="You are a financial analyst AI assistant for Medical Talent PRN Division. You have deep knowledge of this specific financial model. Answer questions using ONLY the data provided. Be concise, specific, and use exact numbers from the model. If a question is not answerable from the model data, say so clearly.\n\n"+snap;
   qaHistory.push({role:"user",content:q});
   var msgs=qaHistory.slice(-10);
-  fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:systemPrompt+"
-
-"+msgs.map(function(m){return m.role+": "+m.content}).join("
-")})})
+  fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:systemPrompt+" "+msgs.map(function(m){return m.role+": "+m.content}).join(" ")})})
   .then(function(r){return r.json();})
   .then(function(data){
     var txt=data.text?data.text:"Unable to answer. Please try again.";
