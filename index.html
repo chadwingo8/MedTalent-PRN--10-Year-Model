@@ -636,28 +636,35 @@ function buildModelSnapshot(){
 }
 
 function genNarrative(){
-  var btn=document.getElementById("narBtn");
-  var res=document.getElementById("narResult");
-  var cpy=document.getElementById("narCopy");
-  btn.disabled=true;btn.textContent="Generating...";
-  res.style.display="block";res.className="ai-result loading";res.textContent="Writing narrative from live model data...";
-  cpy.style.display="none";
-  var snap=buildModelSnapshot();
-  var prompt="You are a financial analyst for Medical Talent, a PRN (per diem) medical staffing company. Using ONLY the data provided below, write a balanced, professional executive narrative suitable for internal planning and investor/lender briefings.\n\nThe narrative should include:\n1. A compelling business overview and market opportunity (2-3 sentences)\n2. Revenue model and key economics ($"+BR+"/hr bill, $"+PR+"/hr pay, $"+GM+"/hr gross margin)\n3. Growth trajectory summary with specific numbers from the data\n4. Path to profitability and cash flow milestones\n5. Capital requirements (LOC usage)\n6. Risks and mitigants (balanced, not overly promotional)\n7. A concise 10-year outlook\n\nTone: Balanced and professional. Grounded in the numbers. Honest about the early-stage losses while showing the long-term trajectory.\n\nFormat with clear section headers. Use $ figures from the data exactly.\n\n"+snap;
-  fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
-  .then(function(r){return r.json();})
-  .then(function(data){
-    var txt=data.text?data.text:"Unable to generate narrative. Please try again.";
-    res.className="ai-result";res.textContent=txt;
-    btn.disabled=false;btn.textContent="Regenerate Narrative";
-    cpy.style.display="inline-block";
-  })
-  .catch(function(){
-    res.className="ai-result";res.textContent="Error connecting to AI. Please try again.";
-    btn.disabled=false;btn.textContent="Generate Narrative";
-  });
+ var btn=document.getElementById("narBtn");
+ var res=document.getElementById("narResult");
+ var cpy=document.getElementById("narCopy");
+ btn.disabled=true;btn.textContent="Generating...";
+ res.style.display="block";res.className="ai-result loading";res.textContent="Writing narrative from live model data...";
+ cpy.style.display="none";
+ var snap=buildModelSnapshot();
+ var prompt="You are a financial analyst for Medical Talent, a PRN (per diem) medical staffing company. Using ONLY the data provided below, write a balanced, professional executive narrative suitable for internal planning and investor/lender briefings.\n\nThe narrative should include:\n1. A compelling business overview and market opportunity (2-3 sentences)\n2. Revenue model and key economics ($"+BR+"/hr bill, $"+PR+"/hr pay, $"+GM+"/hr gross margin)\n3. Growth trajectory summary with specific numbers from the data\n4. Path to profitability and cash flow milestones\n5. Capital requirements (LOC usage)\n6. Risks and mitigants (balanced, not overly promotional)\n7. A concise 10-year outlook\n\nTone: Balanced and professional. Grounded in the numbers. Honest about the early-stage losses while showing the long-term trajectory.\n\nFormat with clear section headers. Use $ figures from the data exactly.\n\n"+snap;
+ fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
+ .then(function(r){
+   if(!r.ok){return r.json().then(function(d){throw new Error(d.error||"Server error "+r.status);});}
+   return r.json();
+ })
+ .then(function(data){
+   if(data.error){
+     res.className="ai-result";res.textContent="AI Error: "+data.error;
+     btn.disabled=false;btn.textContent="Generate Narrative";
+     return;
+   }
+   var txt=data.text||"Unable to generate narrative. Please try again.";
+   res.className="ai-result";res.textContent=txt;
+   btn.disabled=false;btn.textContent="Regenerate Narrative";
+   cpy.style.display="inline-block";
+ })
+ .catch(function(err){
+   res.className="ai-result";res.textContent="Error: "+err.message;
+   btn.disabled=false;btn.textContent="Generate Narrative";
+ });
 }
-
 function copyNarrative(){
   var txt=document.getElementById("narResult").textContent;
   navigator.clipboard.writeText(txt).then(function(){
@@ -668,32 +675,39 @@ function copyNarrative(){
 var qaHistory=[];
 function askStarter(el){document.getElementById("qaInput").value=el.textContent;sendQA();}
 function sendQA(){
-  var inp=document.getElementById("qaInput");
-  var q=inp.value.trim();if(!q)return;
-  var send=document.getElementById("qaSend");
-  var chat=document.getElementById("aiChat");
-  inp.value="";send.disabled=true;
-  var umsg=document.createElement("div");umsg.className="ai-msg user";umsg.textContent=q;chat.appendChild(umsg);
-  var amsg=document.createElement("div");amsg.className="ai-msg assistant loading";amsg.textContent="Thinking...";chat.appendChild(amsg);
-  chat.scrollTop=chat.scrollHeight;
-  var snap=buildModelSnapshot();
-  var systemPrompt="You are a financial analyst AI assistant for Medical Talent PRN Division. You have deep knowledge of this specific financial model. Answer questions using ONLY the data provided. Be concise, specific, and use exact numbers from the model. If a question is not answerable from the model data, say so clearly.\n\n"+snap;
-  qaHistory.push({role:"user",content:q});
-  var msgs=qaHistory.slice(-10);
-  fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:systemPrompt+" "+msgs.map(function(m){return m.role+": "+m.content}).join(" ")})})
-  .then(function(r){return r.json();})
-  .then(function(data){
-    var txt=data.text?data.text:"Unable to answer. Please try again.";
-    amsg.className="ai-msg assistant";amsg.textContent=txt;
-    qaHistory.push({role:"assistant",content:txt});
-    send.disabled=false;chat.scrollTop=chat.scrollHeight;
-  })
-  .catch(function(){
-    amsg.className="ai-msg assistant";amsg.textContent="Error connecting to AI. Please try again.";
-    send.disabled=false;
-  });
+ var inp=document.getElementById("qaInput");
+ var q=inp.value.trim();if(!q)return;
+ var send=document.getElementById("qaSend");
+ var chat=document.getElementById("aiChat");
+ inp.value="";send.disabled=true;
+ var umsg=document.createElement("div");umsg.className="ai-msg user";umsg.textContent=q;chat.appendChild(umsg);
+ var amsg=document.createElement("div");amsg.className="ai-msg assistant loading";amsg.textContent="Thinking...";chat.appendChild(amsg);
+ chat.scrollTop=chat.scrollHeight;
+ var snap=buildModelSnapshot();
+ var systemPrompt="You are a financial analyst AI assistant for Medical Talent PRN Division. You have deep knowledge of this specific financial model. Answer questions using ONLY the data provided. Be concise, specific, and use exact numbers from the model. If a question is not answerable from the model data, say so clearly.\n\n"+snap;
+ qaHistory.push({role:"user",content:q});
+ var msgs=qaHistory.slice(-10);
+ fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:systemPrompt+" "+msgs.map(function(m){return m.role+": "+m.content}).join(" ")})})
+ .then(function(r){
+   if(!r.ok){return r.json().then(function(d){throw new Error(d.error||"Server error "+r.status);});}
+   return r.json();
+ })
+ .then(function(data){
+   if(data.error){
+     amsg.className="ai-msg assistant";amsg.textContent="AI Error: "+data.error;
+     send.disabled=false;chat.scrollTop=chat.scrollHeight;
+     return;
+   }
+   var txt=data.text||"Unable to answer. Please try again.";
+   amsg.className="ai-msg assistant";amsg.textContent=txt;
+   qaHistory.push({role:"assistant",content:txt});
+   send.disabled=false;chat.scrollTop=chat.scrollHeight;
+ })
+ .catch(function(err){
+   amsg.className="ai-msg assistant";amsg.textContent="Error: "+err.message;
+   send.disabled=false;
+ });
 }
-
 function rbeCallout(){
   var cfPos=null,cumBreak=null,worstWk=null,worstVal=0,run=0;
   for(var i=0;i<CF.length;i++){
