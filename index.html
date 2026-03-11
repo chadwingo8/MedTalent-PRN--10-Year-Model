@@ -240,13 +240,15 @@ tr.tot td:first-child{color:#fff}
   <div class="asmp-grid">
     <div class="asmp-row"><label>Bill Rate ($/hr)</label><input type="range" id="sBR" min="25" max="60" step="1" value="33" oninput="updSlider()"><div class="av" id="vBR">$33</div></div>
     <div class="asmp-row"><label>Pay Rate ($/hr)</label><input type="range" id="sPR" min="15" max="50" step="1" value="25" oninput="updSlider()"><div class="av" id="vPR">$25</div></div>
-    <div class="asmp-row"><label>2026 Hrs/Wk Growth</label><input type="range" id="sGPW" min="12" max="120" step="12" value="48" oninput="updSlider()"><div class="av" id="vGPW">48 hrs/wk</div></div>
+    <div class="asmp-row"><label>2026 Hrs/Wk GrowtPayroll Tax: <b id="tPT">15%</b>ange" id="sGPW" min="12" max="120" step="12" value="48" oninput="updSlider()"><div class="av" id="vGPW">48 hrs/wk</div></div>
     <div class="asmp-row"><label>2027+ Internal Hires/Yr</label><input type="range" id="sIHY" min="1" max="20" step="1" value="3" oninput="updSlider()"><div class="av" id="vIHY">3 hires/yr</div></div>
     <div class="asmp-row"><label>Hrs/Wk per Internal Hire</label><input type="range" id="sHPH" min="12" max="72" step="4" value="24" oninput="updSlider()"><div class="av" id="vHPH">24 hrs/hire</div></div>
     <div class="asmp-row"><label>Bonus Threshold (hrs/wk)</label><input type="range" id="sBTH" min="500" max="4000" step="250" value="2000" oninput="updSlider()"><div class="av" id="vBTH">2,000</div></div>
     <div class="asmp-row"><label>Bonus Pool %</label><input type="range" id="sBPC" min="10" max="50" step="5" value="30" oninput="updSlider()"><div class="av" id="vBPC">30%</div></div>
     <div class="asmp-row"><label>LOC Interest Rate (%)</label><input type="range" id="sLR" min="3" max="15" step="0.5" value="5.5" oninput="updSlider()"><div class="av" id="vLR">5.5%</div></div>
     <div class="asmp-row"><label>Income Tax Rate (%)</label><input type="range" id="sTR" min="15" max="40" step="1" value="25" oninput="updSlider()"><div class="av" id="vTR">25%</div></div>
+    <div class="asmp-row"><label>Payroll Tax (%)</label><input type="range" id="sPT" min="5" max="25" step="0.5" value="15" oninput="updSlider()"><div class="av" id="vPT">15%</div></div>
+    <div class="asmp-row"><label>Client Net Terms (weeks)</label><input type="range" id="sNT" min="4" max="17" step="1" value="9" oninput="updSlider()"><div class="av" id="vNT">9 wks (Net 63)</div></div>
   </div>
   <div class="asmp-btn">
     <button class="btn-apply" onclick="applyAssumptions()">Apply &amp; Recalculate</button>
@@ -298,11 +300,7 @@ tr.tot td:first-child{color:#fff}
 <div class="view" id="view-pl">
   <div class="plw">
     <div class="plh"><h2>Profit &amp; Loss Statement</h2><p>Medical Talent PRN Division - Accrual basis | Founder pay tiered by weekly hrs | Commission: $0.10/hr collected (non-founders) | 25% tax after interest, commission &amp; bonus</p></div>
-    <div class="ply" id="pltabs"></div>
-    <table class="plt" id="plt"></table>
-  </div>
-</div>
-<div class="view" id="view-bonus">
+    <div class="ply" id="pl<div class="note">Net Terms: Revenue collected ~<span id="tNT">9 wks (Net 63)</span> after invoicing.class="view" id="view-bonus">
   <div class="bnote">Bonus Pool: 30% of collected net profit (after LOC interest) above 2,000 hrs/wk threshold. Paid quarterly. Uncollected net profit carries forward. Tax: 25% on quarterly net income after interest, commission and bonus. Loss carryforward reduces future taxable income.</div>
   <div class="estrip" id="bntabs" style="border-radius:8px 8px 0 0;margin-bottom:0"></div>
   <div style="border:1px solid var(--line);border-top:none;border-radius:0 0 14px 14px;overflow:hidden;margin-bottom:24px">
@@ -390,8 +388,7 @@ var SCENARIOS=[];
 var SC_COLORS=["s0","s1","s2","s3"];
 var SC_NAMES=["Scenario A","Scenario B","Scenario C","Scenario D"];
 
-function snapAssumptions(){return {BR:BR,PR:PR,GM:GM,BTH:BTH,BPC:BPC,LR:LR,TR:TR,GPW:YRS[0].gpw,GPW2:YRS[1].gpw,label:SC_NAMES[SCENARIOS.length]+" (BR $"+BR+" / PR $"+PR+")"};}
-function saveScenario(){
+function snapAssumptions(){return {BR:BR,PR:PR,GM:GM,BTH:BTH,BPC:BPC,LR:LR,TR:TR,GPW:YRS[0].gpw,GPW2:YRS[1].gpw,label:SC_NAMES[var DEF={BR:33,PR:25,GPW:48,GPW2:72,BTH:2000,BPC:0.30,LR:0.055,TR:0.25,PT:0.15,NT:9};){
   if(SCENARIOS.length>=4){alert("Max 4 scenarios.");return;}
   SCENARIOS.push({snap:snapAssumptions(),D:D.map(function(d){return d;})});
   document.getElementById("scBar").classList.add("active");renderScBar();
@@ -412,10 +409,7 @@ function renderScGrid(){
   var mk=[
     {k:"10-Yr Total Rev",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].tr;return F(t);}},
     {k:"10-Yr Net Income",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].nf;return F(t);}},
-    {k:"10-Yr Bonus Paid",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].bo;return F(t);}},
-    {k:"10-Yr Tax Paid",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].tx;return F(t);}},
-    {k:"Yr 1 Revenue",fn:function(Dd){return F(Dd[0].tr);}},
-    {k:"Yr 1 Net Income",fn:function(Dd){return F(Dd[0].nf);}},
+    {k:"10-Yr Bonus Paid",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].bo;return F(t);}}function snapAssumptions(){return {BR:BR,PR:PR,GM:GM,BTH:BTH,BPC:BPC,LR:LR,TR:TR,PT:PT,NT:N60,GPW:YRS[0].gpw,GPW2:YRS[1].gpw,label:SC_NAMES[SCENARIOS.length]+" (BR $"+BR+" / PR $"+PR+")"};}r 1 Net Income",fn:function(Dd){return F(Dd[0].nf);}},
     {k:"Yr 5 Revenue",fn:function(Dd){return F(Dd[4].tr);}},
     {k:"Yr 5 Net Income",fn:function(Dd){return F(Dd[4].nf);}},
     {k:"Yr 10 Revenue",fn:function(Dd){return F(Dd[9].tr);}},
@@ -455,7 +449,10 @@ function applyAssumptions(){
   var gpw=parseInt(document.getElementById("sGPW").value);
   var _ihyA=parseInt(document.getElementById("sIHY").value),_hphA=parseInt(document.getElementById("sHPH").value),gpw2=_ihyA*_hphA;
   YRS[0].gpw=gpw;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*gpw2;YRS[i].he=i*_ihyA;}
-  var _subEl=document.querySelector("p.sub");if(_subEl){_subEl.textContent="Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +"+_ihyA+" internal hire"+(_ihyA!==1?"s":"")+"/year each +"+_hphA+" hrs/wk";}
+  var _subEl=document.querySelector("p.sub");if(_subEl){_subEl.textConte  document.getElementById("vTR").textContent=document.getElementById("sTR").value+"%";
+  document.getElementById("vPT").textContent=document.getElementById("sPT").value+"%";
+  var _nt=parseInt(document.getElementById("sNT").value);document.getElementById("vNT").textContent=_nt+" wks (Net "+(_nt*7)+")";
+}rnal hire"+(_ihyA!==1?"s":"")+"/year each +"+_hphA+" hrs/wk";}
   document.getElementById("tBR").textContent="$"+BR+"/hr";
   document.getElementById("tPR").textContent="$"+PR+"/hr";
   document.getElementById("tGM").textContent="$"+GM+"/hr";
@@ -466,8 +463,11 @@ function resetAssumptions(){
   YRS[0].gpw=DEF.GPW;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*DEF.GPW2;YRS[i].he=i*3;}
   document.getElementById("sBR").value=DEF.BR;document.getElementById("sPR").value=DEF.PR;
   document.getElementById("sGPW").value=DEF.GPW;document.getElementById("sIHY").value=3;document.getElementById("sHPH").value=24;
-  document.getElementById("sBTH").value=DEF.BTH;document.getElementById("sBPC").value=DEF.BPC*100;
-  document.getElementById("sLR").value=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
+  document.getElementById("sBTH").value=DEF.BTH;document.getElementById("sBPC")  TR=parseInt(document.getElementById("sTR").value)/100;
+  PT=parseFloat(document.getElementById("sPT").value)/100;
+  N60=parseInt(document.getElementById("sNT").value);
+  document.getElementById("tPT").textContent=(PT*100)+"%";
+  document.getElementById("tNT").textContent=N60+" wks (Net "+(N60*7)+")";ue=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
   updSlider();
   document.getElementById("tBR").textContent="$"+BR+"/hr";
   document.getElementById("tPR").textContent="$"+PR+"/hr";
@@ -507,8 +507,11 @@ function baw(){
       var wpc=np*PC3,wdp=cp*SH*DP,wbg=np*BGC,waf=wbg*BGR,wbn=wbg*(1-BGR);
       tp=Math.max(tp,cp);
       all.push({yi:i,yr:Y.yr,wk:w,dt:dt[w-1]||("Wk "+w),
-        wh:wh,wr:wr,wp:wp,gm:wh*GM,ip:ip,fw:fw,hc:hc,ptx:ptx,stx:stx,
-        cp:cp,cl:Math.round(wh/CW*10)/10,wpc:wpc,wdp:wdp,np:np,wbg:wbg,waf:waf,wbn:wbn,
+        wh:wh,wr:w  document.getElementById("sLR").value=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
+  document.getElementById("sPT").value=DEF.PT*100;document.getElementById("sNT").value=DEF.NT;
+  PT=DEF.PT;N60=DEF.NT;
+  document.getElementById("tPT").textContent=(DEF.PT*100)+"%";
+  document.getElementById("tNT").textContent=DEF.NT+" wks (Net "+(DEF.NT*7)+")";pc,wdp:wdp,np:np,wbg:wbg,waf:waf,wbn:wbn,
         inv:wr,imm:wpc+wdp+waf,out:wp+ptx+ip+stx+wbg+SW_WK+mk,
         mk:mk,hasNFstaff:Y.he>0,founderSalAnn:gsal(wh)});
       em+=12/52;
@@ -892,8 +895,8 @@ function rpl(d){
   h+=row('Founder Salaries ('+fSalLbl+')',d.fw,'c-opx',true);
   h+=nt('Tier 1: $80K (0-900 hrs/wk) | Tier 2: $100K (901-1300) | Tier 3: $125K (1301-1600) | Tier 4: $150K (1601-1900) | Tier 5: $175K (1900+)');
   h+=row('Staff Salaries ('+d.he+' staff x $60K/yr)',d.ti-d.fw,'c-opx',true);
-  h+=row('Payroll Tax - Provider Pay (15%)',d.pay*PT,'c-opx',true);
-  h+=row('Payroll Tax - Staff / Founders (15%)',d.ti*PT,'c-opx',true);
+  h+=row('Payroll Tax - Provider Pay ('+(PT*100)+'%)',d.pay*PT,'c-opx',true);
+  h+=row('Payroll Tax - Staff / Founders ('+(PT*100)+'%)',d.ti*PT,'c-opx',true);
   h+=row('Staff Commission ($0.10/hr on collected hrs, non-founders)',d.cm,'c-opx',true);
   h+=nt(d.he>0?'Paid monthly on collected hours (Net 60 lag) | '+d.he+' non-founder staff':'N/A in 2026 - no non-founder staff yet');
   h+=row('Vars Software ($'+VARS_MO+'/mo x '+d.wks+' wks prorated)',Math.round(VARS_MO*d.wks/4.333),'c-opx',true);
@@ -922,9 +925,7 @@ function rbntabs(){
 function rbnk(d){
   var qc=d.qd.length,aq=qc>0?d.bo/qc:0;
   document.getElementById("bnk").innerHTML=
-    '<div class="sb t-obl"><div class="sl">Bonus Paid</div><div class="sv c-obl">'+F(d.bo)+'</div></div>'+
-    '<div class="sb t-obl"><div class="sl">Bonus Accrued</div><div class="sv c-obl">'+F(d.ba)+'</div></div>'+
-    '<div class="sb t-obl"><div class="sl">Avg Quarterly Bonus</div><div class="sv c-obl">'+F(aq)+'</div></div>'+
+    '<div class="sb t-obl"><div class="sl">Bonus Paid</div><div class="sv c-obl">'+F(d.bo)+'</drow('Payroll Tax - Provider Pay ('+(PT*100)+'%)',d.pay*PT,'c-opx',true);ccrued</div><div class="svrow('Payroll Tax - Staff / Founders ('+(PT*100)+'%)',d.ti*PT,'c-opx',true); class="sl">Avg Quarterly Bonus</div><div class="sv c-obl">'+F(aq)+'</div></div>'+
     '<div class="sb t-obl"><div class="sl">Tax Paid</div><div class="sv c-obl">'+F(d.tx)+'</div></div>'+
     '<div class="sb t-net"><div class="sl">Net Income</div><div class="sv '+(d.nf>=0?"c-net":"c-neg")+'">'+F(d.nf)+'</div></div>';
 }
