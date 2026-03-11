@@ -410,7 +410,8 @@ function renderScGrid(){
   var mk=[
     {k:"10-Yr Total Rev",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].tr;return F(t);}},
     {k:"10-Yr Net Income",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].nf;return F(t);}},
-    {k:"10-Yr Bonus Paid",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].bo;return F(t);}}function snapAssumptions(){return {BR:BR,PR:PR,GM:GM,BTH:BTH,BPC:BPC,LR:LR,TR:TR,PT:PT,NT:N60,GPW:YRS[0].gpw,GPW2:YRS[1].gpw,label:SC_NAMES[SCENARIOS.length]+" (BR $"+BR+" / PR $"+PR+")"};}r 1 Net Income",fn:function(Dd){return F(Dd[0].nf);}},
+    {k:"10-Yr Bonus Paid",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].bo;return F(t);}},
+    {k:"Yr 1 Net Income",fn:function(Dd){return F(Dd[0].nf);}},
     {k:"Yr 5 Revenue",fn:function(Dd){return F(Dd[4].tr);}},
     {k:"Yr 5 Net Income",fn:function(Dd){return F(Dd[4].nf);}},
     {k:"Yr 10 Revenue",fn:function(Dd){return F(Dd[9].tr);}},
