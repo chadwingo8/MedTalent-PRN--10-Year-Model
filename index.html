@@ -926,7 +926,9 @@ function rbntabs(){
 function rbnk(d){
   var qc=d.qd.length,aq=qc>0?d.bo/qc:0;
   document.getElementById("bnk").innerHTML=
-    '<div class="sb t-obl"><div class="sl">Bonus Paid</div><div class="sv c-obl">'+F(d.bo)+'</drow('Payroll Tax - Provider Pay ('+(PT*100)+'%)',d.pay*PT,'c-opx',true);ccrued</div><div class="svrow('Payroll Tax - Staff / Founders ('+(PT*100)+'%)',d.ti*PT,'c-opx',true); class="sl">Avg Quarterly Bonus</div><div class="sv c-obl">'+F(aq)+'</div></div>'+
+    '<div class="sb t-obl"><div class="sl">Bonus Paid</div><div class="sv c-obl">'+F(d.bo)+'</div></div>'+
+    '<div class="sb t-obl"><div class="sl">Bonus Accrued</div><div class="sv c-obl">'+F(d.ba)+'</div></div>'+
+    '<div class="sb t-obl"><div class="sl">Avg Quarterly Bonus</div><div class="sv c-obl">'+F(aq)+'</div></div>'+
     '<div class="sb t-obl"><div class="sl">Tax Paid</div><div class="sv c-obl">'+F(d.tx)+'</div></div>'+
     '<div class="sb t-net"><div class="sl">Net Income</div><div class="sv '+(d.nf>=0?"c-net":"c-neg")+'">'+F(d.nf)+'</div></div>';
 }
