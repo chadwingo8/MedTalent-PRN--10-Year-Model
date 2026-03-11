@@ -10,7 +10,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#fff;color:var(--ink);font-family:'DM Sans',sans-serif;padding:40px 48px}
-.hdr{display:flex;align-items:center;gap:24px;margin-bottom:10px}
+.hdr{display:flex;align-items:center;gap:2px;margin-bottom:10px}
 .badge{display:inline-block;background:var(--rev-bg);border:1px solid rgba(30,95,166,0.25);color:var(--rev);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
 h1{font-family:'Playfair Display',serif;font-weight:900;font-size:36px;margin-bottom:4px}
 .sub{color:var(--muted);font-size:14px;margin-bottom:12px}
@@ -300,7 +300,12 @@ tr.tot td:first-child{color:#fff}
 <div class="view" id="view-pl">
   <div class="plw">
     <div class="plh"><h2>Profit &amp; Loss Statement</h2><p>Medical Talent PRN Division - Accrual basis | Founder pay tiered by weekly hrs | Commission: $0.10/hr collected (non-founders) | 25% tax after interest, commission &amp; bonus</p></div>
-    <div class="ply" id="pl<div class="note">Net Terms: Revenue collected ~<span id="tNT">9 wks (Net 63)</span> after invoicing.class="view" id="view-bonus">
+        <div class="ply" id="pltabs"></div>
+        <p style="font-size:.85em;color:#555;margin:8px 0 4px">Net Terms: Revenue collected ~<span id="tNT">9 wks (Net 63)</span>span> after invoicing.</p>p>
+        <table id="plt"></table>
+  </div>
+</div>
+  <div class="view" id="view-bonus">
   <div class="bnote">Bonus Pool: 30% of collected net profit (after LOC interest) above 2,000 hrs/wk threshold. Paid quarterly. Uncollected net profit carries forward. Tax: 25% on quarterly net income after interest, commission and bonus. Loss carryforward reduces future taxable income.</div>
   <div class="estrip" id="bntabs" style="border-radius:8px 8px 0 0;margin-bottom:0"></div>
   <div style="border:1px solid var(--line);border-top:none;border-radius:0 0 14px 14px;overflow:hidden;margin-bottom:24px">
