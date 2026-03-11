@@ -511,11 +511,8 @@ function baw(){
       var wpc=np*PC3,wdp=cp*SH*DP,wbg=np*BGC,waf=wbg*BGR,wbn=wbg*(1-BGR);
       tp=Math.max(tp,cp);
       all.push({yi:i,yr:Y.yr,wk:w,dt:dt[w-1]||("Wk "+w),
-        wh:wh,wr:w  document.getElementById("sLR").value=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
-  document.getElementById("sPT").value=DEF.PT*100;document.getElementById("sNT").value=DEF.NT;
-  PT=DEF.PT;N60=DEF.NT;
-  document.getElementById("tPT").textContent=(DEF.PT*100)+"%";
-  document.getElementById("tNT").textContent=DEF.NT+" wks (Net "+(DEF.NT*7)+")";pc,wdp:wdp,np:np,wbg:wbg,waf:waf,wbn:wbn,
+        wh:wh,wr:wr,wp:wp,gm:wh*GM,ip:ip,fw:fw,hc:hc,ptx:ptx,stx:stx,
+        cp:cp,cl:Math.round(wh/CW*10)/10,wpc:wpc,wdp:wdp,np:np,wbg:wbg,waf:waf,wbn:wbn,
         inv:wr,imm:wpc+wdp+waf,out:wp+ptx+ip+stx+wbg+SW_WK+mk,
         mk:mk,hasNFstaff:Y.he>0,founderSalAnn:gsal(wh)});
       em+=12/52;
