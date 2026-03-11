@@ -454,7 +454,7 @@ function applyAssumptions(){
   TR=parseInt(document.getElementById("sTR").value)/100;
   var gpw=parseInt(document.getElementById("sGPW").value);
   var _ihyA=parseInt(document.getElementById("sIHY").value),_hphA=parseInt(document.getElementById("sHPH").value),gpw2=_ihyA*_hphA;
-  YRS[0].gpw=gpw;for(var i=1;i<YRS.length;i++)YRS[i].gpw=gpw2;
+  YRS[0].gpw=gpw;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*gpw2;YRS[i].he=i*_ihyA;}
   var _subEl=document.querySelector("p.sub");if(_subEl){_subEl.textContent="Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +"+_ihyA+" internal hire"+(_ihyA!==1?"s":"")+"/year each +"+_hphA+" hrs/wk";}
   document.getElementById("tBR").textContent="$"+BR+"/hr";
   document.getElementById("tPR").textContent="$"+PR+"/hr";
@@ -463,7 +463,7 @@ function applyAssumptions(){
 }
 function resetAssumptions(){
   BR=DEF.BR;PR=DEF.PR;GM=BR-PR;BTH=DEF.BTH;BPC=DEF.BPC;LR=DEF.LR;TR=DEF.TR;
-  YRS[0].gpw=DEF.GPW;for(var i=1;i<YRS.length;i++)YRS[i].gpw=DEF.GPW2;
+  YRS[0].gpw=DEF.GPW;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*DEF.GPW2;YRS[i].he=i*3;}
   document.getElementById("sBR").value=DEF.BR;document.getElementById("sPR").value=DEF.PR;
   document.getElementById("sGPW").value=DEF.GPW;document.getElementById("sIHY").value=3;document.getElementById("sHPH").value=24;
   document.getElementById("sBTH").value=DEF.BTH;document.getElementById("sBPC").value=DEF.BPC*100;
