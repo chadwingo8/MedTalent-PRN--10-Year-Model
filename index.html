@@ -301,7 +301,7 @@ tr.tot td:first-child{color:#fff}
   <div class="plw">
     <div class="plh"><h2>Profit &amp; Loss Statement</h2><p>Medical Talent PRN Division - Accrual basis | Founder pay tiered by weekly hrs | Commission: $0.10/hr collected (non-founders) | 25% tax after interest, commission &amp; bonus</p></div>
         <div class="ply" id="pltabs"></div>
-        <p style="font-size:.85em;color:#555;margin:8px 0 4px">Net Terms: Revenue collected ~<span id="tNT">9 wks (Net 63)</span>span> after invoicing.</p>p>
+            <p style="font-size:.85em;color:#555;margin:8px 0 4px">Net Terms: Revenue collected ~<span id="tNT">9 wks (Net 63)</span> after invoicing.</p>
         <table id="plt"></table>
   </div>
 </div>
@@ -999,7 +999,7 @@ function rcharts(){
   document.getElementById("chWkTabs").innerHTML=wkTabs;rWK(aWK);
   mkC("chCS",{type:"bar",data:{labels:lb,datasets:[{label:"Provider Pay",data:dPAY,backgroundColor:CP.cor,borderRadius:2},{label:"BGC Net Cost",data:dBNR,backgroundColor:"rgba(220,38,38,0.45)",borderRadius:2},{label:"Payroll Tax",data:dPT,backgroundColor:CP.opx,borderRadius:2},{label:"Internal Salaries",data:dTI,backgroundColor:CP.opx2,borderRadius:2},{label:"Staff Commission",data:dCM,backgroundColor:"rgba(217,119,6,0.38)",borderRadius:2},{label:"Software",data:dSW,backgroundColor:"rgba(217,119,6,0.28)",borderRadius:2},{label:"Marketing",data:dMK,backgroundColor:"rgba(217,119,6,0.20)",borderRadius:2},{label:"Bonus Paid",data:dBO,backgroundColor:CP.obl,borderRadius:2},{label:"LOC Interest",data:dLI,backgroundColor:CP.dbt,borderRadius:2},{label:"Tax Paid",data:dTX,backgroundColor:CP.obl2,borderRadius:2}]},options:{responsive:true,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:fK}}},plugins:{legend:{labels:lf},tooltip:tC}}});
 }
-function rMX(yi){
+function rMX(yi)
   aMX=yi;var d=D[yi],t=d.tr;
   mkC("chMX",{type:"doughnut",data:{labels:["Staffing Revenue","Daily Pay Fee","Paycard Issue Fee","Admin Fee (BGC)"],datasets:[{data:[Math.round(d.rev/t*1000)/10,Math.round(d.dpr/t*1000)/10,Math.round(d.pcr/t*1000)/10,Math.round(d.afr/t*1000)/10],backgroundColor:["rgba(30,95,166,0.88)","rgba(30,95,166,0.60)","rgba(30,95,166,0.42)","rgba(30,95,166,0.28)"],borderWidth:3,borderColor:"#fff",hoverOffset:6}]},options:{responsive:true,cutout:"58%",plugins:{legend:{position:"right",labels:{font:{family:"DM Sans",size:11},padding:14}},tooltip:{callbacks:{label:function(c){return c.label+": "+c.raw+"%";}}}}}});
 }
