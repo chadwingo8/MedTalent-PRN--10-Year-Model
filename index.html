@@ -441,6 +441,8 @@ function updSlider(){
   document.getElementById("vBPC").textContent=document.getElementById("sBPC").value+"%";
   document.getElementById("vLR").textContent=document.getElementById("sLR").value+"%";
   document.getElementById("vTR").textContent=document.getElementById("sTR").value+"%";
+  document.getElementById("vPT").textContent=document.getElementById("sPT").value+"%";
+  var _nt=parseInt(document.getElementById("sNT").value);document.getElementById("vNT").textContent=_nt+" wks (Net "+(_nt*7)+")";
 }
 function applyAssumptions(){
   BR=parseInt(document.getElementById("sBR").value);PR=parseInt(document.getElementById("sPR").value);
@@ -448,35 +450,35 @@ function applyAssumptions(){
   BPC=parseInt(document.getElementById("sBPC").value)/100;
   LR=parseFloat(document.getElementById("sLR").value)/100;
   TR=parseInt(document.getElementById("sTR").value)/100;
+  PT=parseFloat(document.getElementById("sPT").value)/100;
+  N60=parseInt(document.getElementById("sNT").value);
+  document.getElementById("tPT").textContent=(PT*100)+"%";
+  document.getElementById("tNT").textContent=N60+" wks (Net "+(N60*7)+")";
   var gpw=parseInt(document.getElementById("sGPW").value);
   var _ihyA=parseInt(document.getElementById("sIHY").value),_hphA=parseInt(document.getElementById("sHPH").value),gpw2=_ihyA*_hphA;
   YRS[0].gpw=gpw;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*gpw2;YRS[i].he=i*_ihyA;}
-  var _subEl=document.querySelector("p.sub");if(_subEl){_subEl.textConte  document.getElementById("vTR").textContent=document.getElementById("sTR").value+"%";
-  document.getElementById("vPT").textContent=document.getElementById("sPT").value+"%";
-  var _nt=parseInt(document.getElementById("sNT").value);document.getElementById("vNT").textContent=_nt+" wks (Net "+(_nt*7)+")";
-}rnal hire"+(_ihyA!==1?"s":"")+"/year each +"+_hphA+" hrs/wk";}
+  var _subEl=document.querySelector("p.sub");if(_subEl){_subEl.textContent="Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +"+_ihyA+" internal hire"+(_ihyA!==1?"s":"")+"/year each +"+_hphA+" hrs/wk";}
   document.getElementById("tBR").textContent="$"+BR+"/hr";
   document.getElementById("tPR").textContent="$"+PR+"/hr";
   document.getElementById("tGM").textContent="$"+GM+"/hr";
   rebuild();
 }
 function resetAssumptions(){
-  BR=DEF.BR;PR=DEF.PR;GM=BR-PR;BTH=DEF.BTH;BPC=DEF.BPC;LR=DEF.LR;TR=DEF.TR;
+  BR=DEF.BR;PR=DEF.PR;GM=BR-PR;BTH=DEF.BTH;BPC=DEF.BPC;LR=DEF.LR;TR=DEF.TR;PT=DEF.PT;N60=DEF.NT;
   YRS[0].gpw=DEF.GPW;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*DEF.GPW2;YRS[i].he=i*3;}
   document.getElementById("sBR").value=DEF.BR;document.getElementById("sPR").value=DEF.PR;
   document.getElementById("sGPW").value=DEF.GPW;document.getElementById("sIHY").value=3;document.getElementById("sHPH").value=24;
-  document.getElementById("sBTH").value=DEF.BTH;document.getElementById("sBPC")  TR=parseInt(document.getElementById("sTR").value)/100;
-  PT=parseFloat(document.getElementById("sPT").value)/100;
-  N60=parseInt(document.getElementById("sNT").value);
-  document.getElementById("tPT").textContent=(PT*100)+"%";
-  document.getElementById("tNT").textContent=N60+" wks (Net "+(N60*7)+")";ue=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
+  document.getElementById("sBTH").value=DEF.BTH;document.getElementById("sBPC").value=DEF.BPC*100;
+  document.getElementById("sLR").value=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
+  document.getElementById("sPT").value=DEF.PT*100;document.getElementById("sNT").value=DEF.NT;
   updSlider();
   document.getElementById("tBR").textContent="$"+BR+"/hr";
   document.getElementById("tPR").textContent="$"+PR+"/hr";
   document.getElementById("tGM").textContent="$"+GM+"/hr";
+  document.getElementById("tPT").textContent=(DEF.PT*100)+"%";
+  document.getElementById("tNT").textContent=DEF.NT+" wks (Net "+(DEF.NT*7)+")";
   rebuild();
 }
-
 function mkWk(em){var b=Math.floor(em/6);return MK_BASE*(b+1)*12/52;}
 var YRS=[
   {yr:2026,lb:"2026",wks:43,gpw:48,he:0,sw:7},
