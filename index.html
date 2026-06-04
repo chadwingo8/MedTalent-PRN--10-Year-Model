@@ -1,1037 +1,2262 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Medical Talent PRN</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script><style>
+
 :root{
+
   --rev:#1E5FA6;--rev-bg:rgba(30,95,166,0.08);--rev-mid:rgba(30,95,166,0.18);
+
   --cor:#DC2626;--cor-bg:rgba(220,38,38,0.07);--cor-mid:rgba(220,38,38,0.18);
+
   --opx:#D97706;--opx-bg:rgba(217,119,6,0.07);--opx-mid:rgba(217,119,6,0.22);
+
   --net:#16A34A;--net-bg:rgba(22,163,74,0.07);--net-mid:rgba(22,163,74,0.20);
+
   --obl:#7C3AED;--obl-bg:rgba(124,58,237,0.07);--obl-mid:rgba(124,58,237,0.20);
+
   --dbt:#B45309;--dbt-bg:rgba(180,83,9,0.07);--dbt-mid:rgba(180,83,9,0.22);
+
   --ink:#1A1D26;--ink2:#2d3348;--muted:#5A6178;--line:#E0E3EB;--surface:#F7F8FA;
+
 }
+
 *{margin:0;padding:0;box-sizing:border-box}
+
 body{background:#fff;color:var(--ink);font-family:'DM Sans',sans-serif;padding:40px 48px}
+
 .hdr{display:flex;align-items:center;gap:2px;margin-bottom:10px}
+
 .badge{display:inline-block;background:var(--rev-bg);border:1px solid rgba(30,95,166,0.25);color:var(--rev);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+
 h1{font-family:'Playfair Display',serif;font-weight:900;font-size:36px;margin-bottom:4px}
+
 .sub{color:var(--muted);font-size:14px;margin-bottom:12px}
+
 .logo-wrap{width:72px;height:72px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.08);flex-shrink:0;overflow:hidden}
+
 .logo-wrap img{width:72px;height:72px;object-fit:contain;border-radius:50%}
+
 .asmp{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+
 .tag{background:var(--surface);border:1px solid var(--line);padding:6px 14px;border-radius:8px;font-size:12px;color:var(--muted)}
+
 .tag b{color:var(--ink);font-weight:600}
+
 .tag.rev{background:var(--rev-bg);border-color:rgba(30,95,166,0.25);color:var(--rev)}.tag.rev b{color:var(--rev)}
+
 .tag.cor{background:var(--cor-bg);border-color:rgba(220,38,38,0.22);color:#991B1B}.tag.cor b{color:#991B1B}
+
 .tag.opx{background:var(--opx-bg);border-color:rgba(217,119,6,0.28);color:#92400E}.tag.opx b{color:#92400E}
+
 .tag.obl{background:var(--obl-bg);border-color:rgba(124,58,237,0.25);color:#5B21B6}.tag.obl b{color:#5B21B6}
+
 .tag.dbt{background:var(--dbt-bg);border-color:rgba(180,83,9,0.28);color:#92400E}.tag.dbt b{color:#92400E}
+
 .asmp-panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:20px} 
+
 .asmp-panel h4{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+
 .asmp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
 .asmp-row{display:flex;flex-direction:column;gap:3px}
+
 .asmp-row label{font-size:11px;color:var(--muted);font-weight:600}
+
 .asmp-row input[type=range]{width:100%;accent-color:var(--rev)}
+
 .asmp-row .av{font-size:13px;font-weight:700;color:var(--ink)}
+
 .asmp-btn{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
 .asmp-btn button{padding:7px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700}
+
 .btn-apply{background:var(--rev);color:#fff}.btn-reset{background:var(--line);color:var(--ink)}
+
 .btn-save{background:var(--net);color:#fff}.btn-compare{background:var(--obl);color:#fff}
+
 .nav-tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid var(--line)}
+
 .nav-tab{padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;border-radius:8px 8px 0 0;color:var(--muted);background:transparent;border:none;position:relative;top:2px}
+
 .nav-tab.active{background:#fff;color:var(--rev);border:2px solid var(--line);border-bottom:2px solid #fff}
+
 .view{display:none}.view.active{display:block}
+
 .estrip{display:flex;overflow-x:auto;border-radius:14px 14px 0 0;border:1px solid var(--line);border-bottom:none;background:var(--surface)}
+
 .etab{flex:1;min-width:110px;padding:18px 12px;text-align:center;background:var(--surface);cursor:pointer;border-right:1px solid var(--line);position:relative;user-select:none}
+
 .etab:last-child{border-right:none}.etab:hover{background:#EEF0F4}.etab.active{background:#fff}
+
 .etab.active::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--rev),var(--net))}
+
 .etab .yn{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--ink)}
+
 .etab.active .yn{color:var(--rev)}
+
 .etab .yr{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600}
+
 .etab .ye{font-size:10px;color:var(--rev);margin-top:2px;font-weight:700}
+
 .sbar{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+
 .sbar2{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-left:1px solid var(--line);border-right:1px solid var(--line);border-top:1px solid var(--line)}
+
 .sbar3{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-left:1px solid var(--line);border-right:1px solid var(--line);border-top:1px solid var(--line)}
+
 .sb{background:#fff;padding:14px 10px;text-align:center}
+
 .sb .sl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:4px}
+
 .sb .sv{font-size:17px;font-weight:900;font-family:'Playfair Display',serif}
+
 .sb .sv2{font-size:11px;font-weight:600;color:var(--muted);margin-top:3px}
+
 .sb.t-rev{background:var(--rev-bg)}.sb.t-rev .sl{color:var(--rev)}
+
 .sb.t-cor{background:var(--cor-bg)}.sb.t-cor .sl{color:#991B1B}
+
 .sb.t-opx{background:var(--opx-bg)}.sb.t-opx .sl{color:#92400E}
+
 .sb.t-net{background:var(--net-bg)}.sb.t-net .sl{color:#166534}
+
 .sb.t-obl{background:var(--obl-bg)}.sb.t-obl .sl{color:#5B21B6}
+
 .sb.t-dbt{background:var(--dbt-bg)}.sb.t-dbt .sl{color:#92400E}
+
 .c-rev{color:var(--rev)}.c-cor{color:var(--cor)}.c-opx{color:var(--opx)}
+
 .c-net{color:var(--net)}.c-obl{color:var(--obl)}.c-dbt{color:var(--dbt)}
+
 .c-neg{color:var(--cor)}.c-neu{color:var(--ink)}.c-mut{color:var(--muted)}
+
 .wk-toolbar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-bottom:none;flex-wrap:wrap}
+
 .wk-toolbar input{padding:6px 12px;border:1px solid var(--line);border-radius:7px;font-size:12px;font-family:'DM Sans',sans-serif;width:180px}
+
 .wk-toolbar label{font-size:12px;color:var(--muted);font-weight:600}
+
 .btn-csv{padding:6px 14px;background:var(--net);color:#fff;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-left:auto}
+
 .tw{border:1px solid var(--line);border-top:none;border-radius:0 0 14px 14px;overflow:hidden;max-height:480px;overflow-y:auto}
+
 .tw::-webkit-scrollbar{width:6px}.tw::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+
 table{width:100%;border-collapse:collapse}
+
 thead{position:sticky;top:0;z-index:2}
+
 th{padding:12px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:#EEF0F4;border-bottom:1px solid var(--line)}
+
 th:first-child{text-align:left;padding-left:20px}
+
 th.hrev{background:var(--rev-mid);color:var(--rev)}th.hcor{background:var(--cor-mid);color:#991B1B}
+
 th.hopx{background:var(--opx-mid);color:#92400E}th.hnet{background:var(--net-mid);color:#166534}
+
 th.hobl{background:var(--obl-mid);color:#5B21B6}th.hdbt{background:var(--dbt-mid);color:#92400E}
+
 td{padding:10px 14px;text-align:right;font-size:13px;font-weight:500;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+
 td:first-child{text-align:left;font-weight:700;color:var(--muted);padding-left:20px;font-size:12px}
+
 tr:hover td{background:rgba(30,95,166,0.03)}tr:last-child td{border-bottom:none}
+
 tr.qr td{background:rgba(30,95,166,0.05);font-weight:700;border-top:2px solid rgba(30,95,166,0.18);border-bottom:2px solid rgba(30,95,166,0.18)}
+
 tr.qr td:first-child{color:var(--rev)}
+
 tr.bp td{background:var(--obl-bg);border-top:2px solid rgba(124,58,237,0.22);border-bottom:2px solid rgba(124,58,237,0.22)}
+
 tr.bp td:first-child{color:var(--obl)}
+
 tr.tr2 td{background:rgba(124,58,237,0.05);border-top:2px solid rgba(124,58,237,0.18);border-bottom:2px solid rgba(124,58,237,0.18)}
+
 tr.tr2 td:first-child{color:var(--obl)}
+
 tr.ld td{background:var(--dbt-bg)}
+
 tr.tot td{background:var(--ink);color:#fff;font-weight:700;font-size:12px;position:sticky;bottom:0}
+
 tr.tot td:first-child{color:#fff}
+
 .plw{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:32px}
+
 .plh{background:linear-gradient(135deg,var(--ink),var(--ink2));padding:20px 28px;color:#fff}
+
 .plh h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:4px}
+
 .plh p{font-size:12px;opacity:.7}
+
 .plt{width:100%;border-collapse:collapse}
+
 .plt td{padding:11px 24px;font-size:13px;border-bottom:1px solid var(--line)}
+
 .plt tr:last-child td{border-bottom:none}
+
 .plt .ps{font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;padding:10px 24px}
+
 .plt .ps-rev{background:var(--rev-mid);color:var(--rev)}.plt .ps-cor{background:var(--cor-mid);color:#991B1B}
+
 .plt .ps-net{background:var(--net-mid);color:#166534}.plt .ps-opx{background:var(--opx-mid);color:#92400E}
+
 .plt .ps-dbt{background:var(--dbt-mid);color:#92400E}.plt .ps-obl{background:var(--obl-mid);color:#5B21B6}
+
 .plt .pt{background:var(--surface);font-weight:700;font-size:14px}
+
 .plt .pg{background:linear-gradient(135deg,var(--net-bg),rgba(30,95,166,0.06));font-weight:900;font-size:15px;font-family:'Playfair Display',serif}
+
 .plt .lbl{color:var(--ink)}.plt .val{text-align:right;font-variant-numeric:tabular-nums}
+
 .ply{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);background:var(--surface)}
+
 .pyt{flex:1;min-width:90px;padding:14px 8px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);border-right:1px solid var(--line)}
+
 .pyt:last-child{border-right:none}.pyt:hover{background:#EEF0F4}.pyt.active{background:#fff;color:var(--rev)}
+
 .cfh{background:linear-gradient(135deg,#0c4a6e,var(--rev));padding:20px 28px;color:#fff;border-radius:14px 14px 0 0}
+
 .cfh h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:4px}
+
 .cfh p{font-size:12px;opacity:.7}
+
 .cfk{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+
 .note{background:var(--opx-bg);border:1px solid rgba(217,119,6,0.25);border-radius:10px;padding:12px 18px;margin-bottom:12px;font-size:12px;color:#92400E;display:flex;gap:10px}
+
 .bnote{background:var(--obl-bg);border:1px solid rgba(124,58,237,0.25);border-radius:10px;padding:12px 18px;margin-bottom:20px;font-size:12px;color:#5B21B6;display:flex;gap:10px}
+
 .cg2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px}
+
 .cc2{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
+
 .cc2 h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:4px}
+
 .cc2 p{font-size:11px;color:var(--muted);margin-bottom:16px}
+
 .cc2 canvas{max-height:260px}
+
 .cf2{grid-column:1/-1}
+
 .mxtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+
 .mxtab{cursor:pointer;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+
 .mxtab.active{background:var(--rev);color:#fff}
+
 .be-callout{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+
 .be-card{flex:1;min-width:200px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;flex-direction:column;gap:4px}
+
 .be-card .be-scope{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9CA3AF}
+
 .be-card .be-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+
 .be-card .be-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:900}
+
 .be-card .be-sub{font-size:11px;color:var(--muted)}
+
 .be-card.pos{border-color:rgba(22,163,74,0.4);background:var(--net-bg)}
+
 .be-card.neg{border-color:rgba(220,38,38,0.3);background:var(--cor-bg)}
+
 .be-card.warn{border-color:rgba(180,83,9,0.35);background:var(--dbt-bg)}
+
 .sc-bar{background:#F0F4FF;border:1px solid #C7D2FE;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:none}
+
 .sc-bar.active{display:block}
+
 .sc-bar h4{font-size:12px;font-weight:700;color:#3730A3;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+
 .sc-list{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+
 .sc-chip{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;border:2px solid transparent}
+
 .sc-chip.s0{background:var(--cor-bg);border-color:var(--cor);color:var(--cor)}
+
 .sc-chip.s1{background:var(--rev-bg);border-color:var(--rev);color:var(--rev)}
+
 .sc-chip.s2{background:var(--net-bg);border-color:var(--net);color:#166534}
+
 .sc-chip.s3{background:var(--obl-bg);border-color:var(--obl);color:#5B21B6}
+
 .sc-chip .sc-del{font-size:14px;font-weight:900;margin-left:4px;opacity:.6;cursor:pointer}
+
 .sc-chip .sc-del:hover{opacity:1}
+
 .sc-compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:12px}
+
 .sc-col{border:2px solid var(--line);border-radius:10px;padding:14px;background:#fff}
+
 .sc-col.s0{border-color:var(--cor)}.sc-col.s1{border-color:var(--rev)}.sc-col.s2{border-color:var(--net)}.sc-col.s3{border-color:var(--obl)}
+
 .sc-col h5{font-size:12px;font-weight:700;margin-bottom:10px}
+
 .sc-col h5.s0{color:var(--cor)}.sc-col h5.s1{color:var(--rev)}.sc-col h5.s2{color:var(--net)}.sc-col h5.s3{color:var(--obl)}
+
 .sc-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px}
+
 .sc-row:last-child{border-bottom:none}
+
 .sc-row .sc-k{color:var(--muted)}.sc-row .sc-v{font-weight:700;font-variant-numeric:tabular-nums}
+
 .ftr{text-align:center;padding-top:24px;margin-top:32px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:12px}
+
 .ftr-logo{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0}
+
 .ftr-logo img{width:32px;height:32px;object-fit:contain}
+
 .print-btn{padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-left:auto;display:block;margin-bottom:16px}
+
 .legend-bar{display:flex;gap:16px;flex-wrap:wrap;padding:10px 0;margin-bottom:4px;font-size:11px;font-weight:600}
+
 .lg{display:flex;align-items:center;gap:5px}
+
 .lg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
 @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
 .fade{animation:fu .35s ease forwards}
 
 /* AI PANEL */
+
 .ai-fab{position:fixed;bottom:32px;right:32px;z-index:1000;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#1E5FA6);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.45);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}
+
 .ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(124,58,237,0.55)}
+
 .ai-fab svg{width:26px;height:26px;fill:#fff}
+
 .ai-panel{position:fixed;top:0;right:-440px;width:420px;height:100vh;background:#fff;border-left:1px solid var(--line);box-shadow:-8px 0 40px rgba(0,0,0,0.12);z-index:999;display:flex;flex-direction:column;transition:right .3s cubic-bezier(.4,0,.2,1)}
+
 .ai-panel.open{right:0}
+
 .ai-panel-hdr{background:linear-gradient(135deg,#7C3AED,#1E5FA6);padding:20px 20px 16px;color:#fff;flex-shrink:0}
+
 .ai-panel-hdr h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;margin-bottom:2px}
+
 .ai-panel-hdr p{font-size:11px;opacity:.75}
+
 .ai-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+
 .ai-close:hover{background:rgba(255,255,255,0.35)}
+
 .ai-tabs{display:flex;border-bottom:1px solid var(--line);flex-shrink:0}
+
 .ai-tab{flex:1;padding:11px 8px;font-size:12px;font-weight:700;text-align:center;cursor:pointer;color:var(--muted);border:none;background:#fff;border-bottom:3px solid transparent}
+
 .ai-tab.active{color:#7C3AED;border-bottom-color:#7C3AED}
+
 .ai-body{flex:1;overflow-y:auto;padding:16px}
+
 .ai-body::-webkit-scrollbar{width:4px}.ai-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
+
 .ai-section{display:none}.ai-section.active{display:block}
+
 .ai-gen-btn{width:100%;padding:12px;background:linear-gradient(135deg,#7C3AED,#1E5FA6);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;transition:opacity .2s}
+
 .ai-gen-btn:hover{opacity:.9}
+
 .ai-gen-btn:disabled{opacity:.55;cursor:not-allowed}
+
 .ai-result{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;min-height:80px}
+
 .ai-result.loading{color:var(--muted);font-style:italic}
+
 .ai-copy-btn{margin-top:8px;padding:6px 14px;background:var(--ink);color:#fff;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer}
+
 .ai-copy-btn:hover{opacity:.85}
+
 .ai-starters{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+
 .ai-starter{padding:10px 14px;background:var(--obl-bg);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:#5B21B6;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;font-weight:600;transition:background .15s}
+
 .ai-starter:hover{background:rgba(124,58,237,0.14)}
+
 .ai-qa-input-wrap{display:flex;gap:8px;margin-bottom:12px}
+
 .ai-qa-input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none}
+
 .ai-qa-input:focus{border-color:#7C3AED}
+
 .ai-qa-send{padding:10px 16px;background:#7C3AED;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer}
+
 .ai-qa-send:disabled{opacity:.5;cursor:not-allowed}
+
 .ai-qa-send:hover:not(:disabled){background:#6D28D9}
+
 .ai-chat{display:flex;flex-direction:column;gap:10px}
+
 .ai-msg{padding:10px 13px;border-radius:10px;font-size:13px;line-height:1.6;max-width:95%}
+
 .ai-msg.user{background:var(--rev-bg);border:1px solid rgba(30,95,166,0.2);color:var(--rev);align-self:flex-end;font-weight:600}
+
 .ai-msg.assistant{background:var(--surface);border:1px solid var(--line);color:var(--ink);align-self:flex-start;white-space:pre-wrap}
+
 .ai-msg.loading{color:var(--muted);font-style:italic}
+
 .ai-divider{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:8px 0 4px}
 
 @media print{.nav-tabs,.asmp-panel,.print-btn,.wk-toolbar,.ai-fab,.ai-panel{display:none!important}.view{display:block!important}body{padding:16px}}
-@media(max-width:900px){body{padding:20px}.estrip{flex-wrap:wrap}.etab{min-width:80px;padding:14px 8px}.sbar,.sbar2,.sbar3{grid-template-columns:repeat(3,1fr)}.hdr{flex-direction:column;align-items:flex-start}.cg2{grid-template-columns:1fr}.cfk{grid-template-columns:repeat(3,1fr)}.asmp-grid{grid-template-columns:repeat(2,1fr)}.ai-panel{width:100%}}
- .mpl-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:32px} .mpl-hdr{background:linear-gradient(135deg,var(--rev),#0c4a6e);padding:20px 28px;color:#fff} .mpl-hdr h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:4px} .mpl-hdr p{font-size:12px;opacity:.7} .mpl-ytabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);background:var(--surface)} .mpl-ytab{flex:1;min-width:90px;padding:14px 8px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);border-right:1px solid var(--line)} .mpl-ytab:last-child{border-right:none} .mpl-ytab:hover{background:#EEF0F4} .mpl-ytab.active{background:#fff;color:var(--rev)} .mpl-kpi{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)} .mpl-tbl-wrap{max-height:540px;overflow-y:auto} .mpl-tbl{width:100%;border-collapse:collapse} .mpl-tbl thead{position:sticky;top:0;z-index:2} .mpl-tbl th{padding:10px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:#EEF0F4;border-bottom:1px solid var(--line);white-space:nowrap} .mpl-tbl th:first-child{text-align:left;padding-left:16px;min-width:200px} .mpl-tbl th.hrev{background:var(--rev-mid);color:var(--rev)} .mpl-tbl th.hcor{background:var(--cor-mid);color:#991B1B} .mpl-tbl th.hopx{background:var(--opx-mid);color:#92400E} .mpl-tbl th.hnet{background:var(--net-mid);color:#166534} .mpl-tbl th.hobl{background:var(--obl-mid);color:#5B21B6} .mpl-tbl th.hdbt{background:var(--dbt-mid);color:#92400E} .mpl-tbl td{padding:9px 12px;text-align:right;font-size:12px;font-weight:500;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap} .mpl-tbl td:first-child{text-align:left;font-weight:700;color:var(--muted);padding-left:16px;font-size:11px} .mpl-tbl tr:hover td{background:rgba(30,95,166,0.03)} .mpl-tbl tr.mpl-sec td{background:var(--rev-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:var(--rev)} .mpl-tbl tr.mpl-cor td{background:var(--cor-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#991B1B} .mpl-tbl tr.mpl-opx td{background:var(--opx-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#92400E} .mpl-tbl tr.mpl-gp td{background:var(--net-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#166534} .mpl-tbl tr.mpl-dbt td{background:var(--dbt-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#92400E} .mpl-tbl tr.mpl-obl td{background:var(--obl-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#5B21B6} .mpl-tbl tr.mpl-sub td{background:var(--surface);font-weight:700;font-size:13px} .mpl-tbl tr.mpl-gr td{background:linear-gradient(135deg,var(--net-bg),rgba(30,95,166,0.06));font-weight:900;font-size:14px;font-family:'Playfair Display',serif} .mpl-chart-wrap{padding:20px;border-top:1px solid var(--line)} </style></head><body>
+
+@media(max-width:900px){body{padding:20px}.estrip{flex-wrap:wrap}.etab{min-width:80px;padding:14px 8px}.sbar,.sbar2,.sbar3{grid-template-columns:repeat(3,1fr)}.hdr{flex-direction:column;align-items:flex-start}.cg2{grid-template-columns:1fr}.cfk{grid-template-columns:repeat(3,1fr)}.asmp-grid{grid-template-columns:repeat(2,1fr)}.ai-panel{width:100%}} .mpl-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:32px} .mpl-hdr{background:linear-gradient(135deg,var(--rev),#0c4a6e);padding:20px 28px;color:#fff} .mpl-hdr h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:4px} .mpl-hdr p{font-size:12px;opacity:.7} .mpl-ytabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);background:var(--surface)} .mpl-ytab{flex:1;min-width:90px;padding:14px 8px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);border-right:1px solid var(--line)} .mpl-ytab:last-child{border-right:none} .mpl-ytab:hover{background:#EEF0F4} .mpl-ytab.active{background:#fff;color:var(--rev)} .mpl-kpi{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)} .mpl-tbl-wrap{max-height:540px;overflow-y:auto} .mpl-tbl{width:100%;border-collapse:collapse} .mpl-tbl thead{position:sticky;top:0;z-index:2} .mpl-tbl th{padding:10px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:#EEF0F4;border-bottom:1px solid var(--line);white-space:nowrap} .mpl-tbl th:first-child{text-align:left;padding-left:16px;min-width:200px} .mpl-tbl th.hrev{background:var(--rev-mid);color:var(--rev)} .mpl-tbl th.hcor{background:var(--cor-mid);color:#991B1B} .mpl-tbl th.hopx{background:var(--opx-mid);color:#92400E} .mpl-tbl th.hnet{background:var(--net-mid);color:#166534} .mpl-tbl th.hobl{background:var(--obl-mid);color:#5B21B6} .mpl-tbl th.hdbt{background:var(--dbt-mid);color:#92400E} .mpl-tbl td{padding:9px 12px;text-align:right;font-size:12px;font-weight:500;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap} .mpl-tbl td:first-child{text-align:left;font-weight:700;color:var(--muted);padding-left:16px;font-size:11px} .mpl-tbl tr:hover td{background:rgba(30,95,166,0.03)} .mpl-tbl tr.mpl-sec td{background:var(--rev-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:var(--rev)} .mpl-tbl tr.mpl-cor td{background:var(--cor-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#991B1B} .mpl-tbl tr.mpl-opx td{background:var(--opx-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#92400E} .mpl-tbl tr.mpl-gp td{background:var(--net-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#166534} .mpl-tbl tr.mpl-dbt td{background:var(--dbt-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#92400E} .mpl-tbl tr.mpl-obl td{background:var(--obl-mid);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;padding:8px 16px;color:#5B21B6} .mpl-tbl tr.mpl-sub td{background:var(--surface);font-weight:700;font-size:13px} .mpl-tbl tr.mpl-gr td{background:linear-gradient(135deg,var(--net-bg),rgba(30,95,166,0.06));font-weight:900;font-size:14px;font-family:'Playfair Display',serif} .mpl-chart-wrap{padding:20px;border-top:1px solid var(--line)} 
+
+.hp-tools{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;padding:16px 20px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:8px 0 16px}
+
+.hp-tbl{width:100%;border-collapse:collapse;margin-bottom:8px}
+
+.hp-tbl th{padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:left;border-bottom:1px solid var(--line)}
+
+.hp-tbl td{padding:6px 10px;border-bottom:1px solid var(--line)}
+
+.hp-in{padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;width:90px;background:#FFFDF5}
+
+.hp-in.hp-wk{width:74px}.hp-in.hp-ct{width:62px}
+
+.hp-del{background:var(--cor);color:#fff;border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:15px;font-weight:700;line-height:1}
+
+.hp-sum{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+
+.hp-sum th{background:#EEF0F4;padding:10px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:right}.hp-sum th:first-child{text-align:left}
+
+.hp-sum td{padding:9px 10px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line);font-size:13px}.hp-sum td:first-child{text-align:left;font-weight:700;color:var(--rev)}
+
+.seg{padding:7px 14px;border:1px solid var(--line);background:#fff;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border-radius:8px;margin-right:6px}
+
+.seg.active{background:var(--rev);color:#fff;border-color:var(--rev)}
+
+.act-in{padding:5px 8px;border:1px solid var(--opx);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;width:120px;background:#FFFDF5;text-align:right}
+
+.act-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;max-height:540px;overflow-y:auto}
+
+.act-tbl{width:100%;border-collapse:collapse}
+
+.act-tbl thead{position:sticky;top:0;z-index:2}
+
+.act-tbl th{padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:#EEF0F4;border-bottom:1px solid var(--line)}
+
+.act-tbl th:first-child{text-align:left}
+
+.act-tbl td{padding:8px 14px;text-align:right;font-size:12px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+
+</style></head><body>
+
 <div class="hdr">
+
   <div class="logo-wrap">
+
     <img src="https://i.postimg.cc/qRsZMNBX/medtalent-logo.png" alt="Medical Talent Logo" onerror="this.style.display='none';this.parentNode.innerHTML='<svg width=\'72\' height=\'72\' viewBox=\'0 0 200 200\'><circle cx=\'100\' cy=\'100\' r=\'100\' fill=\'white\'/><rect x=\'78\' y=\'28\' width=\'44\' height=\'144\' rx=\'8\' fill=\'#1E5FA6\'/><rect x=\'28\' y=\'78\' width=\'144\' height=\'44\' rx=\'8\' fill=\'#1E5FA6\'/></svg>'">
+
   </div>
+
   <div><div class="badge">PRN Division - 10 Year Growth Model</div><h1>Medical Talent</h1></div>
+
 </div>
+
 <p class="sub">Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +3 internal hires/year each +24 hrs/wk</p>
+
 <div class="legend-bar">
+
   <div class="lg"><div class="lg-dot" style="background:#1E5FA6"></div><span style="color:#1E5FA6">Revenue (money in)</span></div>
+
   <div class="lg"><div class="lg-dot" style="background:#DC2626"></div><span style="color:#DC2626">Cost of Revenue</span></div>
+
   <div class="lg"><div class="lg-dot" style="background:#D97706"></div><span style="color:#92400E">Operating Expenses</span></div>
+
   <div class="lg"><div class="lg-dot" style="background:#16A34A"></div><span style="color:#16A34A">Net Outcomes / Profit</span></div>
+
   <div class="lg"><div class="lg-dot" style="background:#7C3AED"></div><span style="color:#7C3AED">Tax + Bonus (Distributions)</span></div>
+
   <div class="lg"><div class="lg-dot" style="background:#B45309"></div><span style="color:#B45309">LOC / Debt</span></div>
+
 </div>
+
 <div class="asmp">
+
   <div class="tag rev">Bill Rate: <b id="tBR">$33/hr</b></div>
+
   <div class="tag rev">Pay Rate: <b id="tPR">$25/hr</b></div>
+
   <div class="tag rev">Gross Margin: <b id="tGM">$8/hr</b></div>
+
   <div class="tag rev">Provider Avg: <b>24 hrs/wk (3 shifts)</b></div>
+
   <div class="tag rev">Client Avg: <b>150 hrs/wk</b></div>
+
   <div class="tag rev">Paycard Issue Fee: <b>$3/provider</b></div>
+
   <div class="tag rev">Daily Pay Fee: <b>$7.95/shift</b></div>
+
   <div class="tag cor">BGC + Drug Screen: <b>$100/new provider</b></div>
+
   <div class="tag rev">Admin Fee Recovery: <b>80% of BGC billed back</b></div>
+
   <div class="tag opx">Software: <b>$2,650/mo</b></div>
-  <div class="tag opx">Payroll Tax: <b id="tPT">15%</b></div>
+
+  <div class="tag opx">Payroll Tax (Prov / Int): <b id="tPT">13.35% / 11.50%</b></div>
+
   <div class="tag opx">Staff Commission: <b>$0.10/hr collected (non-founders, 2027+)</b></div>
+
   <div class="tag opx">Marketing: <b>$1,000/mo start | +$1,000/mo every 6 months</b></div>
+
   <div class="tag dbt">Line of Credit: <b>5.5% APR</b></div>
+
   <div class="tag obl">Bonus Pool: <b>30% of collected net profit (after LOC interest) above 2,000 hrs/wk quarterly</b></div>
+
   <div class="tag obl">Income Tax: <b>25% quarterly (loss carryforward applied)</b></div>
+
   <div class="tag opx">Founder Pay: <b>Tiered $80K-$175K/each (by weekly hrs)</b></div>
+
 </div>
+
 <div class="asmp-panel">
+
   <h4>Live Assumptions -- adjust and click Apply to recalculate</h4>
+
   <div class="asmp-grid">
+
     <div class="asmp-row"><label>Bill Rate ($/hr)</label><input type="range" id="sBR" min="25" max="60" step="1" value="33" oninput="updSlider()"><div class="av" id="vBR">$33</div></div>
+
     <div class="asmp-row"><label>Pay Rate ($/hr)</label><input type="range" id="sPR" min="15" max="50" step="1" value="25" oninput="updSlider()"><div class="av" id="vPR">$25</div></div>
-    <div class="asmp-row"><label>2026 Hrs/Wk Growth</label><input type="range" id="sGPW" min="12" max="120" step="12" value="48" oninput="updSlider()"><div class="av" id="vGPW">48 hrs/wk</div></div>
-    <div class="asmp-row"><label>2027+ Internal Hires/Yr</label><input type="range" id="sIHY" min="1" max="20" step="1" value="3" oninput="updSlider()"><div class="av" id="vIHY">3 hires/yr</div></div>
-    <div class="asmp-row"><label>Hrs/Wk per Internal Hire</label><input type="range" id="sHPH" min="12" max="72" step="4" value="24" oninput="updSlider()"><div class="av" id="vHPH">24 hrs/hire</div></div>
+
+    <div class="asmp-row"><label>Founder-Producers</label><input type="range" id="sFND" min="1" max="4" step="1" value="2" oninput="updSlider()"><div class="av" id="vFND">2</div></div>
+
+    <div class="asmp-row"><label>Salespeople Hired/Yr (2027+)</label><input type="range" id="sSPY" min="1" max="12" step="1" value="3" oninput="updSlider()"><div class="av" id="vSPY">3/yr</div></div>
+
+    <div class="asmp-row"><label>Ramp: Weeks at 0 hrs</label><input type="range" id="sSZW" min="0" max="26" step="1" value="12" oninput="updSlider()"><div class="av" id="vSZW">12 wks</div></div>
+
+    <div class="asmp-row"><label>Ramp: +Hrs/Wk After</label><input type="range" id="sSGR" min="8" max="48" step="2" value="24" oninput="updSlider()"><div class="av" id="vSGR">24 hrs/wk</div></div>
+
     <div class="asmp-row"><label>Bonus Threshold (hrs/wk)</label><input type="range" id="sBTH" min="500" max="4000" step="250" value="2000" oninput="updSlider()"><div class="av" id="vBTH">2,000</div></div>
+
     <div class="asmp-row"><label>Bonus Pool %</label><input type="range" id="sBPC" min="10" max="50" step="5" value="30" oninput="updSlider()"><div class="av" id="vBPC">30%</div></div>
+
     <div class="asmp-row"><label>LOC Interest Rate (%)</label><input type="range" id="sLR" min="3" max="15" step="0.5" value="5.5" oninput="updSlider()"><div class="av" id="vLR">5.5%</div></div>
+
     <div class="asmp-row"><label>Income Tax Rate (%)</label><input type="range" id="sTR" min="15" max="40" step="1" value="25" oninput="updSlider()"><div class="av" id="vTR">25%</div></div>
-    <div class="asmp-row"><label>Payroll Tax (%)</label><input type="range" id="sPT" min="5" max="25" step="0.5" value="15" oninput="updSlider()"><div class="av" id="vPT">15%</div></div>
+
+    <div class="asmp-row"><label>Provider Payroll Tax (%)</label><input type="range" id="sPTP" min="5" max="25" step="0.05" value="13.35" oninput="updSlider()"><div class="av" id="vPTP">13.35%</div></div>
+
+    <div class="asmp-row"><label>Internal Payroll Tax (%)</label><input type="range" id="sPTI" min="5" max="25" step="0.05" value="11.5" oninput="updSlider()"><div class="av" id="vPTI">11.5%</div></div>
+
     <div class="asmp-row"><label>Client Net Terms (weeks)</label><input type="range" id="sNT" min="4" max="17" step="1" value="9" oninput="updSlider()"><div class="av" id="vNT">9 wks (Net 63)</div></div>
+
   </div>
+
   <div class="asmp-btn">
+
     <button class="btn-apply" onclick="applyAssumptions()">Apply &amp; Recalculate</button>
+
     <button class="btn-reset" onclick="resetAssumptions()">Reset Defaults</button>
+
     <button class="btn-save" onclick="saveScenario()">Save Scenario</button>
+
     <button class="btn-compare" onclick="toggleCompare()">Compare Scenarios</button>
+
   </div>
+
 </div>
+
 <div class="sc-bar" id="scBar">
+
   <h4>Scenario Comparison</h4>
+
   <div class="sc-list" id="scList"></div>
+
   <div class="sc-compare-grid" id="scGrid"></div>
+
 </div>
+
 <button class="print-btn" onclick="window.print()">Export / Print</button>
+
 <div class="nav-tabs">
+
   <button class="nav-tab active" onclick="sv('weekly',event)">Weekly Model</button>
+
   <button class="nav-tab" onclick="sv('cashflow',event)">Cash Flow</button>
+
   <button class="nav-tab" onclick="sv('pl',event)">P&amp;L</button>
+
   <button class="nav-tab" onclick="sv('bonus',event)">Bonus Pool</button>
+
   <button class="nav-tab" onclick="sv('charts',event)">Charts</button>
+
  <button class="nav-tab" onclick="sv('mpl',event)">Monthly P&amp;L</button>
+
+  <button class="nav-tab" onclick="sv('hiring',event)">Hiring Planner</button>
+
+  <button class="nav-tab" onclick="sv('actuals',event)">Actuals vs Plan</button>
+
 </div>
+
 <div class="view active" id="view-weekly">
+
   <div id="be-callout" class="be-callout"></div>
+
   <div class="estrip" id="tabs"></div>
+
   <div class="sbar" id="sb1"></div>
+
   <div class="sbar2" id="sb2"></div>
+
   <div class="sbar3" id="sb3"></div>
+
   <div class="wk-toolbar">
+
     <label>Jump to week:</label>
+
     <input type="text" id="wkSearch" placeholder="e.g. Jun 15 or Wk 14" oninput="filterWks()">
+
     <button class="btn-csv" onclick="exportCSV()">Download CSV</button>
+
   </div>
+
   <div class="tw fade" id="tbl"></div>
+
 </div>
+
 <div class="view" id="view-cashflow">
+
   <div class="note">Net 60 Terms: Revenue collected ~9 weeks after invoicing. Costs paid weekly. Commission paid monthly on collected hours. LOC drawn when cash goes negative; repaid as collections arrive. Tax paid quarterly. Loss carryforward offsets future taxable income.</div>
+
   <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px">
+
     <div class="cfh"><h2>Cash Flow Analysis</h2><p>Net 60 | LOC 5.5% | Commission monthly | Bonus quarterly | Tax 25% quarterly</p></div>
+
     <div class="cfk" id="cfk"></div>
+
     <div style="max-height:480px;overflow-y:auto"><table id="cft"></table></div>
+
   </div>
+
   <div class="cg2">
+
     <div class="cc2 cf2"><h3>Weekly Cash Position &amp; LOC Balance</h3><p>Cash on hand vs. outstanding line of credit balance</p><canvas id="chCP"></canvas></div>
+
     <div class="cc2"><h3>Cash In vs. Cash Out (Weekly)</h3><p>Collections vs. disbursements</p><canvas id="chCF"></canvas></div>
+
     <div class="cc2"><h3>AR Aging (Outstanding Receivables)</h3><p>Accounts receivable - invoiced but not yet collected</p><canvas id="chAR"></canvas></div>
+
   </div>
+
   <div class="estrip" id="cftabs" style="border-radius:8px;margin-bottom:16px"></div>
+
 </div>
+
 <div class="view" id="view-pl">
+
   <div class="plw">
+
     <div class="plh"><h2>Profit &amp; Loss Statement</h2><p>Medical Talent PRN Division - Accrual basis | Founder pay tiered by weekly hrs | Commission: $0.10/hr collected (non-founders) | 25% tax after interest, commission &amp; bonus</p></div>
+
         <div class="ply" id="pltabs"></div>
+
             <p style="font-size:.85em;color:#555;margin:8px 0 4px">Net Terms: Revenue collected ~<span id="tNT">9 wks (Net 63)</span> after invoicing.</p>
+
         <table id="plt"></table>
+
   </div>
+
 </div>
+
   <div class="view" id="view-bonus">
+
   <div class="bnote">Bonus Pool: 30% of collected net profit (after LOC interest) above 2,000 hrs/wk threshold. Paid quarterly. Uncollected net profit carries forward. Tax: 25% on quarterly net income after interest, commission and bonus. Loss carryforward reduces future taxable income.</div>
+
   <div class="estrip" id="bntabs" style="border-radius:8px 8px 0 0;margin-bottom:0"></div>
+
   <div style="border:1px solid var(--line);border-top:none;border-radius:0 0 14px 14px;overflow:hidden;margin-bottom:24px">
+
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)" id="bnk"></div>
+
     <div style="max-height:480px;overflow-y:auto"><table id="bnt"></table></div>
+
   </div>
+
   <div class="cg2">
+
     <div class="cc2 cf2"><h3>Quarterly Bonus Payouts - 10 Year</h3><p>Bonus distributed each quarter across all years</p><canvas id="chBA"></canvas></div>
+
     <div class="cc2"><h3>Accrued Pool vs. Distributed (Selected Year)</h3><p>Weekly accrual build-up and quarterly distributions</p><canvas id="chBP"></canvas></div>
+
     <div class="cc2"><h3>Annual Tax Expense</h3><p>25% tax on net income after interest, commission and bonus</p><canvas id="chBT"></canvas></div>
+
   </div>
+
 </div>
+
 <div class="view" id="view-charts">
+
   <div class="cg2">
+
     <div class="cc2 cf2"><h3>10-Year Revenue &amp; Profit Waterfall</h3><p>Annual Total Revenue, Gross Profit, Net Operating Income, and Net Income after all deductions and tax</p><canvas id="chWF"></canvas></div>
+
     <div class="cc2"><h3>Cash Position &amp; LOC Over 10 Years</h3><p>Year-end cash on hand vs. peak LOC balance drawn</p><canvas id="chLQ"></canvas></div>
+
     <div class="cc2"><h3>Margin Compression / Expansion</h3><p>Gross margin %, Net operating margin %, and Net margin % year over year</p><canvas id="chMP"></canvas></div>
+
     <div class="cc2"><h3>Bonus Pool vs. Tax vs. Net Income</h3><p>Annual bonus paid, income tax, and retained net income</p><canvas id="chPA"></canvas></div>
+
     <div class="cc2"><h3>Provider &amp; Client Growth</h3><p>End-of-year provider headcount and client count over 10 years</p><canvas id="chGR"></canvas></div>
+
     <div class="cc2"><h3>Revenue Mix by Stream</h3><p>Percentage breakdown of each revenue stream - click a year to update</p><div class="mxtabs" id="chMixTabs"></div><canvas id="chMX"></canvas></div>
+
     <div class="cc2"><h3>Cumulative Net Income After Tax</h3><p>Running total of retained earnings - breakeven point highlighted</p><canvas id="chCU"></canvas></div>
+
     <div class="cc2"><h3>Weekly Net Income (Selected Year)</h3><p>Intra-year net income shape - select year below</p><div class="mxtabs" id="chWkTabs"></div><canvas id="chWK"></canvas></div>
+
     <div class="cc2 cf2"><h3>Annual Cost Structure Breakdown</h3><p>Stacked view of every major cost category year over year</p><canvas id="chCS"></canvas></div>
+
   </div>
+
 </div>
+
 <div class="view" id="view-mpl"><div class="mpl-wrap"><div class="mpl-hdr"><h2>Monthly P&amp;L Statement</h2><p>Medical Talent PRN Division &mdash; Accrual basis | All revenue and costs aggregated by calendar month</p></div><div class="mpl-ytabs" id="mpl-ytabs"></div><div class="mpl-kpi" id="mpl-kpi"></div><div class="mpl-tbl-wrap"><table class="mpl-tbl" id="mpl-tbl"></table></div><div class="mpl-chart-wrap"><div class="cg2"><div class="cc2"><h3>Monthly Revenue &amp; Gross Profit</h3><p>Total revenue and gross profit by month for selected year</p><canvas id="chMplRev"></canvas></div><div class="cc2"><h3>Monthly Net Income</h3><p>Net income after all expenses, interest, bonus and tax</p><canvas id="chMplNet"></canvas></div></div></div></div></div>
+
+<div class="view" id="view-hiring">
+
+  <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px">
+
+    <div class="cfh" style="background:linear-gradient(135deg,#0c4a6e,var(--rev))"><h2>Hiring Planner</h2><p>Build the growth engine from a custom hiring schedule. Each producer bills 0 hrs for the zero-week period, then grows +N hrs/week. Click Apply to Model to drive every tab from this plan.</p></div>
+
+    <div style="padding:20px">
+
+      <div id="hp-status" style="margin-bottom:12px;font-size:13px"></div>
+
+      <table class="hp-tbl"><thead><tr><th>Hire Week #</th><th>Date</th><th>How Many</th><th>Role</th><th></th></tr></thead><tbody id="hp-tbody"></tbody></table>
+
+      <div class="hp-tools">
+
+        <button class="btn-save" onclick="hpAddRow()">+ Add Hire</button>
+
+        <div><label style="font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:3px">Ramp: Weeks at 0 hrs</label><input class="hp-in" id="hp-zero" type="number" min="0" value="12"></div>
+
+        <div><label style="font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:3px">Ramp: +Hrs/Wk After</label><input class="hp-in" id="hp-growth" type="number" min="1" value="24"></div>
+
+        <button class="btn-compare" onclick="hpRender()">Update Preview</button>
+
+        <button class="btn-apply" onclick="hpApply()">Apply to Model</button>
+
+        <button class="btn-reset" onclick="hpReset()">Reset to Default</button>
+
+      </div>
+
+      <div id="hp-summary" style="margin-top:8px"></div>
+
+    </div>
+
+  </div>
+
+  <div class="cc2 cf2"><h3>Projected Weekly Billable Hours</h3><p>Total company billable hours per week across the 10-year horizon for this schedule</p><canvas id="chHP"></canvas></div>
+
+</div>
+
+<div class="view" id="view-actuals">
+
+  <div class="note">Enter actuals for closed months in the yellow cells. Variance compares actual vs plan. The reforecast keeps your actuals for closed months, then carries the plan&rsquo;s trajectory forward &mdash; shifted (Level Shift) or scaled (Proportional) to your latest actual. This is a directional reforecast and does not re-run the full LOC / tax / bonus engine. Actuals are saved in your browser.</div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:14px">
+
+    <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:5px">Metric</div><div id="act-metric"></div></div>
+
+    <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:5px">Reforecast Method</div><div id="act-method"></div></div>
+
+    <button class="btn-reset" style="margin-left:auto" onclick="actClear()">Clear All Actuals</button>
+
+  </div>
+
+  <div class="sbar" id="act-kpi" style="margin-bottom:16px;border:1px solid var(--line)"></div>
+
+  <div class="act-wrap"><table class="act-tbl" id="act-tbl"></table></div>
+
+  <div class="cc2 cf2" style="margin-top:24px"><h3>Plan vs Actual vs Reforecast</h3><p>Selected metric by month across the full horizon</p><canvas id="chAct"></canvas></div>
+
+</div>
+
 <div class="ftr">
+
   <div class="ftr-logo"><img src="https://i.postimg.cc/qRsZMNBX/medtalent-logo.png" alt="Medical Talent" onerror="this.parentNode.style.background='linear-gradient(135deg,#DC2626,#1E5FA6)';this.style.display='none'"></div>
+
   Medical Talent PRN Division - March 2026
+
 </div>
 
 <!-- AI FAB -->
+
 <button class="ai-fab" onclick="toggleAI()" title="AI Insights">
+
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M0 0h24v24H0z" fill="none"/><path d="M9 9h2v6H9zm4 0h2v6h-2z" fill="none"/><path fill="#fff" d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm-1 13H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+
 </button>
 
 <!-- AI SIDE PANEL -->
+
 <div class="ai-panel" id="aiPanel">
+
   <div class="ai-panel-hdr" style="position:relative">
+
     <h3>AI Insights</h3>
+
     <p>Powered by live model data</p>
+
     <button class="ai-close" onclick="toggleAI()">&#x2715;</button>
+
   </div>
+
   <div class="ai-tabs">
+
     <button class="ai-tab active" onclick="switchAITab('narrative',this)">Investor Narrative</button>
+
     <button class="ai-tab" onclick="switchAITab('qa',this)">Q&amp;A</button>
+
   </div>
+
   <div class="ai-body">
+
     <div class="ai-section active" id="ai-narrative">
+
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5">Generates a balanced executive narrative from the current live model state — suitable for internal planning, investor briefings, or lender conversations.</p>
+
       <button class="ai-gen-btn" id="narBtn" onclick="genNarrative()">Generate Narrative</button>
+
       <div class="ai-result" id="narResult" style="display:none"></div>
+
       <button class="ai-copy-btn" id="narCopy" style="display:none" onclick="copyNarrative()">Copy to Clipboard</button>
+
     </div>
+
     <div class="ai-section" id="ai-qa">
+
       <div class="ai-divider">Suggested questions</div>
+
       <div class="ai-starters">
+
         <button class="ai-starter" onclick="askStarter(this)">When do we hit cumulative breakeven and what drives it?</button>
+
         <button class="ai-starter" onclick="askStarter(this)">What is the peak LOC exposure and when does it occur?</button>
+
         <button class="ai-starter" onclick="askStarter(this)">How does the bonus pool scale across the 10 years?</button>
+
         <button class="ai-starter" onclick="askStarter(this)">What are the biggest risks to the Year 1 projections?</button>
+
         <button class="ai-starter" onclick="askStarter(this)">How do founder salaries impact net operating income over time?</button>
+
         <button class="ai-starter" onclick="askStarter(this)">What happens to margins as we scale from 2026 to 2035?</button>
+
       </div>
+
       <div class="ai-divider">Ask anything</div>
+
       <div class="ai-qa-input-wrap">
+
         <input class="ai-qa-input" id="qaInput" placeholder="Ask about the model..." onkeydown="if(event.key==='Enter')sendQA()">
+
         <button class="ai-qa-send" id="qaSend" onclick="sendQA()">Ask</button>
+
       </div>
+
       <div class="ai-chat" id="aiChat"></div>
+
     </div>
+
   </div>
+
 </div>
 
 <script>
+
 var WKD={"2026":["Mar 02","Mar 09","Mar 16","Mar 23","Mar 30","Apr 06","Apr 13","Apr 20","Apr 27","May 04","May 11","May 18","May 25","Jun 01","Jun 08","Jun 15","Jun 22","Jun 29","Jul 06","Jul 13","Jul 20","Jul 27","Aug 03","Aug 10","Aug 17","Aug 24","Aug 31","Sep 07","Sep 14","Sep 21","Sep 28","Oct 05","Oct 12","Oct 19","Oct 26","Nov 02","Nov 09","Nov 16","Nov 23","Nov 30","Dec 07","Dec 14","Dec 21"],"2027":["Jan 04","Jan 11","Jan 18","Jan 25","Feb 01","Feb 08","Feb 15","Feb 22","Mar 01","Mar 08","Mar 15","Mar 22","Mar 29","Apr 05","Apr 12","Apr 19","Apr 26","May 03","May 10","May 17","May 24","May 31","Jun 07","Jun 14","Jun 21","Jun 28","Jul 05","Jul 12","Jul 19","Jul 26","Aug 02","Aug 09","Aug 16","Aug 23","Aug 30","Sep 06","Sep 13","Sep 20","Sep 27","Oct 04","Oct 11","Oct 18","Oct 25","Nov 01","Nov 08","Nov 15","Nov 22","Nov 29","Dec 06","Dec 13","Dec 20","Dec 27"],"2028":["Jan 03","Jan 10","Jan 17","Jan 24","Jan 31","Feb 07","Feb 14","Feb 21","Feb 28","Mar 06","Mar 13","Mar 20","Mar 27","Apr 03","Apr 10","Apr 17","Apr 24","May 01","May 08","May 15","May 22","May 29","Jun 05","Jun 12","Jun 19","Jun 26","Jul 03","Jul 10","Jul 17","Jul 24","Jul 31","Aug 07","Aug 14","Aug 21","Aug 28","Sep 04","Sep 11","Sep 18","Sep 25","Oct 02","Oct 09","Oct 16","Oct 23","Oct 30","Nov 06","Nov 13","Nov 20","Nov 27","Dec 04","Dec 11","Dec 18","Dec 25"],"2029":["Jan 01","Jan 08","Jan 15","Jan 22","Jan 29","Feb 05","Feb 12","Feb 19","Feb 26","Mar 05","Mar 12","Mar 19","Mar 26","Apr 02","Apr 09","Apr 16","Apr 23","Apr 30","May 07","May 14","May 21","May 28","Jun 04","Jun 11","Jun 18","Jun 25","Jul 02","Jul 09","Jul 16","Jul 23","Jul 30","Aug 06","Aug 13","Aug 20","Aug 27","Sep 03","Sep 10","Sep 17","Sep 24","Oct 01","Oct 08","Oct 15","Oct 22","Oct 29","Nov 05","Nov 12","Nov 19","Nov 26","Dec 03","Dec 10","Dec 17","Dec 24"],"2030":["Jan 07","Jan 14","Jan 21","Jan 28","Feb 04","Feb 11","Feb 18","Feb 25","Mar 04","Mar 11","Mar 18","Mar 25","Apr 01","Apr 08","Apr 15","Apr 22","Apr 29","May 06","May 13","May 20","May 27","Jun 03","Jun 10","Jun 17","Jun 24","Jul 01","Jul 08","Jul 15","Jul 22","Jul 29","Aug 05","Aug 12","Aug 19","Aug 26","Sep 02","Sep 09","Sep 16","Sep 23","Sep 30","Oct 07","Oct 14","Oct 21","Oct 28","Nov 04","Nov 11","Nov 18","Nov 25","Dec 02","Dec 09","Dec 16","Dec 23","Dec 30"],"2031":["Jan 06","Jan 13","Jan 20","Jan 27","Feb 03","Feb 10","Feb 17","Feb 24","Mar 03","Mar 10","Mar 17","Mar 24","Mar 31","Apr 07","Apr 14","Apr 21","Apr 28","May 05","May 12","May 19","May 26","Jun 02","Jun 09","Jun 16","Jun 23","Jun 30","Jul 07","Jul 14","Jul 21","Jul 28","Aug 04","Aug 11","Aug 18","Aug 25","Sep 01","Sep 08","Sep 15","Sep 22","Sep 29","Oct 06","Oct 13","Oct 20","Oct 27","Nov 03","Nov 10","Nov 17","Nov 24","Dec 01","Dec 08","Dec 15","Dec 22","Dec 29"],"2032":["Jan 05","Jan 12","Jan 19","Jan 26","Feb 02","Feb 09","Feb 16","Feb 23","Mar 01","Mar 08","Mar 15","Mar 22","Mar 29","Apr 05","Apr 12","Apr 19","Apr 26","May 03","May 10","May 17","May 24","May 31","Jun 07","Jun 14","Jun 21","Jun 28","Jul 05","Jul 12","Jul 19","Jul 26","Aug 02","Aug 09","Aug 16","Aug 23","Aug 30","Sep 06","Sep 13","Sep 20","Sep 27","Oct 04","Oct 11","Oct 18","Oct 25","Nov 01","Nov 08","Nov 15","Nov 22","Nov 29","Dec 06","Dec 13","Dec 20","Dec 27"],"2033":["Jan 03","Jan 10","Jan 17","Jan 24","Jan 31","Feb 07","Feb 14","Feb 21","Feb 28","Mar 07","Mar 14","Mar 21","Mar 28","Apr 04","Apr 11","Apr 18","Apr 25","May 02","May 09","May 16","May 23","May 30","Jun 06","Jun 13","Jun 20","Jun 27","Jul 04","Jul 11","Jul 18","Jul 25","Aug 01","Aug 08","Aug 15","Aug 22","Aug 29","Sep 05","Sep 12","Sep 19","Sep 26","Oct 03","Oct 10","Oct 17","Oct 24","Oct 31","Nov 07","Nov 14","Nov 21","Nov 28","Dec 05","Dec 12","Dec 19","Dec 26"],"2034":["Jan 02","Jan 09","Jan 16","Jan 23","Jan 30","Feb 06","Feb 13","Feb 20","Feb 27","Mar 06","Mar 13","Mar 20","Mar 27","Apr 03","Apr 10","Apr 17","Apr 24","May 01","May 08","May 15","May 22","May 29","Jun 05","Jun 12","Jun 19","Jun 26","Jul 03","Jul 10","Jul 17","Jul 24","Jul 31","Aug 07","Aug 14","Aug 21","Aug 28","Sep 04","Sep 11","Sep 18","Sep 25","Oct 02","Oct 09","Oct 16","Oct 23","Oct 30","Nov 06","Nov 13","Nov 20","Nov 27","Dec 04","Dec 11","Dec 18","Dec 25"],"2035":["Jan 01","Jan 08","Jan 15","Jan 22","Jan 29","Feb 05","Feb 12","Feb 19","Feb 26","Mar 05","Mar 12","Mar 19","Mar 26","Apr 02","Apr 09","Apr 16","Apr 23","Apr 30","May 07","May 14","May 21","May 28","Jun 04","Jun 11","Jun 18","Jun 25","Jul 02","Jul 09","Jul 16","Jul 23","Jul 30","Aug 06","Aug 13","Aug 20","Aug 27","Sep 03","Sep 10","Sep 17","Sep 24","Oct 01","Oct 08","Oct 15","Oct 22","Oct 29","Nov 05","Nov 12","Nov 19","Nov 26","Dec 03","Dec 10","Dec 17","Dec 24"]};
 
-var DEF={BR:33,PR:25,GPW:48,GPW2:72,BTH:2000,BPC:0.30,LR:0.055,TR:0.25,PT:0.15,NT:9};
-var BR=33,PR=25,GM=8,NW=24,CW=150,PC3=3,DP=7.95,SH=3,PT=0.15,N60=9;
+var DEF={BR:33,PR:25,FND:2,SPY:3,SZW:12,SGR:24,BTH:2000,BPC:0.30,LR:0.055,TR:0.25,PTP:0.1335,PTI:0.115,NT:9};
+
+var BR=33,PR=25,GM=8,NW=24,CW=150,PC3=3,DP=7.95,SH=3,N60=9;
+
+var PT_PROV=0.1335,PT_INT=0.115;
+
+var FOUNDERS=2,SALES_ZERO_WKS=12,SALES_GROWTH=24,SALES_PER_YEAR=3,SALES_START_YEAR=2027;
+
+var CUSTOM_EVENTS=null;
+
 var BGC=100,BGR=0.80,BTH=2000,BPC=0.30,LR=0.055,TR=0.25;
+
 var VARS_MO=650,PYRL_MO=2000,SW_WK=(VARS_MO+PYRL_MO)*12/52;
-var CM_RATE=0.10,CM_WEEKS=4,MK_BASE=1000;
+
+var CM_WEEKS=4,MK_BASE=1000,CM_TARGET_MET=true;
+
+function cliffRate(hrs){if(hrs<=500)return 0;if(hrs<=2500)return 0.04;if(hrs<=5000)return 0.05;return 0.06;}
+
 var TIERS=[{max:900,sal:80000},{max:1300,sal:100000},{max:1600,sal:125000},{max:1900,sal:150000},{max:9999999,sal:175000}];
+
 function gsal(wh){for(var i=0;i<TIERS.length;i++){if(wh<=TIERS[i].max)return TIERS[i].sal;}return 175000;}
+
 var SCENARIOS=[];
+
 var SC_COLORS=["s0","s1","s2","s3"];
+
 var SC_NAMES=["Scenario A","Scenario B","Scenario C","Scenario D"];
 
-function snapAssumptions(){return {BR:BR,PR:PR,GM:GM,BTH:BTH,BPC:BPC,LR:LR,TR:TR,PT:PT,NT:N60,GPW:YRS[0].gpw,GPW2:YRS[1].gpw,label:SC_NAMES[SCENARIOS.length]+" (BR $"+BR+" / PR $"+PR+")"};}
+function snapAssumptions(){return {BR:BR,PR:PR,GM:GM,BTH:BTH,BPC:BPC,LR:LR,TR:TR,PTP:PT_PROV,PTI:PT_INT,NT:N60,FND:FOUNDERS,SPY:SALES_PER_YEAR,SZW:SALES_ZERO_WKS,SGR:SALES_GROWTH,label:SC_NAMES[SCENARIOS.length]+" (BR $"+BR+" / PR $"+PR+")"};}
+
 function saveScenario(){
+
   if(SCENARIOS.length>=4){alert("Max 4 scenarios.");return;}
+
   SCENARIOS.push({snap:snapAssumptions(),D:D.map(function(d){return d;})});
+
   document.getElementById("scBar").classList.add("active");renderScBar();
+
 }
+
 function toggleCompare(){
+
   if(SCENARIOS.length===0){alert("Save at least one scenario first.");return;}
+
   var b=document.getElementById("scBar");b.classList.contains("active")?b.classList.remove("active"):b.classList.add("active");
+
 }
+
 function deleteScenario(i){SCENARIOS.splice(i,1);renderScBar();if(SCENARIOS.length===0)document.getElementById("scBar").classList.remove("active");}
+
 function renderScBar(){
+
   if(SCENARIOS.length===0){document.getElementById("scBar").classList.remove("active");return;}
+
   var chips="";
+
   for(var i=0;i<SCENARIOS.length;i++)chips+='<div class="sc-chip '+SC_COLORS[i]+'">'+SCENARIOS[i].snap.label+'<span class="sc-del" onclick="deleteScenario('+i+')">&times;</span></div>';
+
   document.getElementById("scList").innerHTML=chips;renderScGrid();
+
 }
+
 function renderScGrid(){
+
   if(SCENARIOS.length===0){document.getElementById("scGrid").innerHTML="";return;}
+
   var mk=[
+
     {k:"10-Yr Total Rev",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].tr;return F(t);}},
+
     {k:"10-Yr Net Income",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].nf;return F(t);}},
+
     {k:"10-Yr Bonus Paid",fn:function(Dd){var t=0;for(var i=0;i<Dd.length;i++)t+=Dd[i].bo;return F(t);}},
+
     {k:"Yr 1 Net Income",fn:function(Dd){return F(Dd[0].nf);}},
+
     {k:"Yr 5 Revenue",fn:function(Dd){return F(Dd[4].tr);}},
+
     {k:"Yr 5 Net Income",fn:function(Dd){return F(Dd[4].nf);}},
+
     {k:"Yr 10 Revenue",fn:function(Dd){return F(Dd[9].tr);}},
+
     {k:"Yr 10 Net Income",fn:function(Dd){return F(Dd[9].nf);}},
+
     {k:"Bill Rate",fn:function(Dd,s){return "$"+s.BR+"/hr";}},
+
     {k:"Pay Rate",fn:function(Dd,s){return "$"+s.PR+"/hr";}},
+
     {k:"Bonus Threshold",fn:function(Dd,s){return L(s.BTH)+" hrs/wk";}},
+
     {k:"Bonus Pool %",fn:function(Dd,s){return (s.BPC*100).toFixed(0)+"%";}},
+
     {k:"LOC Rate",fn:function(Dd,s){return (s.LR*100).toFixed(1)+"%";}},
+
     {k:"Tax Rate",fn:function(Dd,s){return (s.TR*100).toFixed(0)+"%";}}
+
   ];
+
   var cols="";
+
   for(var i=0;i<SCENARIOS.length;i++){
+
     var sc=SCENARIOS[i],rows="";
+
     for(var m=0;m<mk.length;m++)rows+='<div class="sc-row"><span class="sc-k">'+mk[m].k+'</span><span class="sc-v">'+mk[m].fn(sc.D,sc.snap)+'</span></div>';
+
     cols+='<div class="sc-col '+SC_COLORS[i]+'"><h5 class="'+SC_COLORS[i]+'">'+sc.snap.label+'</h5>'+rows+'</div>';
+
   }
+
   document.getElementById("scGrid").innerHTML=cols;
+
 }
 
 function updSlider(){
+
   document.getElementById("vBR").textContent="$"+document.getElementById("sBR").value;
+
   document.getElementById("vPR").textContent="$"+document.getElementById("sPR").value;
-  document.getElementById("vGPW").textContent=document.getElementById("sGPW").value+" hrs/wk";
-  var _ihy=parseInt(document.getElementById("sIHY").value),_hph=parseInt(document.getElementById("sHPH").value);document.getElementById("vIHY").textContent=_ihy+" hire"+(_ihy!==1?"s":"")+"/yr";document.getElementById("vHPH").textContent=_hph+" hrs/hire";
+
+  document.getElementById("vFND").textContent=document.getElementById("sFND").value;
+
+  var spy=parseInt(document.getElementById("sSPY").value);document.getElementById("vSPY").textContent=spy+"/yr";
+
+  document.getElementById("vSZW").textContent=parseInt(document.getElementById("sSZW").value)+" wks";
+
+  document.getElementById("vSGR").textContent=parseInt(document.getElementById("sSGR").value)+" hrs/wk";
+
   document.getElementById("vBTH").textContent=parseInt(document.getElementById("sBTH").value).toLocaleString();
+
   document.getElementById("vBPC").textContent=document.getElementById("sBPC").value+"%";
+
   document.getElementById("vLR").textContent=document.getElementById("sLR").value+"%";
+
   document.getElementById("vTR").textContent=document.getElementById("sTR").value+"%";
-  document.getElementById("vPT").textContent=document.getElementById("sPT").value+"%";
-  var _nt=parseInt(document.getElementById("sNT").value);document.getElementById("vNT").textContent=_nt+" wks (Net "+(_nt*7)+")";
+
+  document.getElementById("vPTP").textContent=document.getElementById("sPTP").value+"%";
+
+  document.getElementById("vPTI").textContent=document.getElementById("sPTI").value+"%";
+
+  var nt=parseInt(document.getElementById("sNT").value);document.getElementById("vNT").textContent=nt+" wks (Net "+(_nt*7)+")";
+
 }
+
 function applyAssumptions(){
+
+  CUSTOM_EVENTS=null;
+
   BR=parseInt(document.getElementById("sBR").value);PR=parseInt(document.getElementById("sPR").value);
+
   GM=BR-PR;BTH=parseInt(document.getElementById("sBTH").value);
+
   BPC=parseInt(document.getElementById("sBPC").value)/100;
+
   LR=parseFloat(document.getElementById("sLR").value)/100;
+
   TR=parseInt(document.getElementById("sTR").value)/100;
-  PT=parseFloat(document.getElementById("sPT").value)/100;
+
+  PT_PROV=parseFloat(document.getElementById("sPTP").value)/100;
+
+  PT_INT=parseFloat(document.getElementById("sPTI").value)/100;
+
   N60=parseInt(document.getElementById("sNT").value);
-  document.getElementById("tPT").textContent=(PT*100)+"%";
+
+  FOUNDERS=parseInt(document.getElementById("sFND").value);SALES_PER_YEAR=parseInt(document.getElementById("sSPY").value);SALES_ZERO_WKS=parseInt(document.getElementById("sSZW").value);SALES_GROWTH=parseInt(document.getElementById("sSGR").value);
+
+  document.getElementById("tPT").textContent=(PT_PROV*100).toFixed(2)+"% / "+(PT_INT*100).toFixed(2)+"%";
+
   document.getElementById("tNT").textContent=N60+" wks (Net "+(N60*7)+")";
-  var gpw=parseInt(document.getElementById("sGPW").value);
-  var _ihyA=parseInt(document.getElementById("sIHY").value),_hphA=parseInt(document.getElementById("sHPH").value),gpw2=_ihyA*_hphA;
-  YRS[0].gpw=gpw;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*gpw2;YRS[i].he=i*_ihyA;}
-  var _subEl=document.querySelector("p.sub");if(_subEl){_subEl.textContent="Week 1: March 2, 2026 | 2026 Ramp: 1 employee at +48 hrs/wk | 2027+: +"+_ihyA+" internal hire"+(_ihyA!==1?"s":"")+"/year each +"+_hphA+" hrs/wk";}
+
+  var subEl=document.querySelector("p.sub");if(subEl){_subEl.textContent="Week 1: March 2, 2026 | "+FOUNDERS+" founder-producers at launch + "+SALES_PER_YEAR+" salespeople/yr from 2027 | Each ramps 0 hrs for "+SALES_ZERO_WKS+" wks, then +"+SALES_GROWTH+" hrs/wk";}
+
   document.getElementById("tBR").textContent="$"+BR+"/hr";
+
   document.getElementById("tPR").textContent="$"+PR+"/hr";
+
   document.getElementById("tGM").textContent="$"+GM+"/hr";
+
   rebuild();
+
 }
+
 function resetAssumptions(){
-  BR=DEF.BR;PR=DEF.PR;GM=BR-PR;BTH=DEF.BTH;BPC=DEF.BPC;LR=DEF.LR;TR=DEF.TR;PT=DEF.PT;N60=DEF.NT;
-  YRS[0].gpw=DEF.GPW;for(var i=1;i<YRS.length;i++){YRS[i].gpw=i*DEF.GPW2;YRS[i].he=i*3;}
+
+  CUSTOM_EVENTS=null;
+
+  BR=DEF.BR;PR=DEF.PR;GM=BR-PR;BTH=DEF.BTH;BPC=DEF.BPC;LR=DEF.LR;TR=DEF.TR;PT_PROV=DEF.PTP;PT_INT=DEF.PTI;N60=DEF.NT;
+
+  FOUNDERS=DEF.FND;SALES_PER_YEAR=DEF.SPY;SALES_ZERO_WKS=DEF.SZW;SALES_GROWTH=DEF.SGR;
+
   document.getElementById("sBR").value=DEF.BR;document.getElementById("sPR").value=DEF.PR;
-  document.getElementById("sGPW").value=DEF.GPW;document.getElementById("sIHY").value=3;document.getElementById("sHPH").value=24;
+
+  document.getElementById("sFND").value=DEF.FND;document.getElementById("sSPY").value=DEF.SPY;document.getElementById("sSZW").value=DEF.SZW;document.getElementById("sSGR").value=DEF.SGR;
+
   document.getElementById("sBTH").value=DEF.BTH;document.getElementById("sBPC").value=DEF.BPC*100;
+
   document.getElementById("sLR").value=DEF.LR*100;document.getElementById("sTR").value=DEF.TR*100;
-  document.getElementById("sPT").value=DEF.PT*100;document.getElementById("sNT").value=DEF.NT;
+
+  document.getElementById("sPTP").value=DEF.PTP*100;document.getElementById("sPTI").value=DEF.PTI*100;document.getElementById("sNT").value=DEF.NT;
+
   updSlider();
+
   document.getElementById("tBR").textContent="$"+BR+"/hr";
+
   document.getElementById("tPR").textContent="$"+PR+"/hr";
+
   document.getElementById("tGM").textContent="$"+GM+"/hr";
-  document.getElementById("tPT").textContent=(DEF.PT*100)+"%";
+
+  document.getElementById("tPT").textContent=(DEF.PTP*100).toFixed(2)+"% / "+(DEF.PTI*100).toFixed(2)+"%";
+
   document.getElementById("tNT").textContent=DEF.NT+" wks (Net "+(DEF.NT*7)+")";
+
   rebuild();
+
 }
+
 function mkWk(em){var b=Math.floor(em/6);return MK_BASE*(b+1)*12/52;}
+
 var YRS=[
+
   {yr:2026,lb:"2026",wks:43,gpw:48,he:0,sw:7},
+
   {yr:2027,lb:"2027",wks:52,gpw:72,he:3},
+
   {yr:2028,lb:"2028",wks:52,gpw:144,he:6},
+
   {yr:2029,lb:"2029",wks:52,gpw:216,he:9},
+
   {yr:2030,lb:"2030",wks:52,gpw:288,he:12},
+
   {yr:2031,lb:"2031",wks:52,gpw:360,he:15},
+
   {yr:2032,lb:"2032",wks:52,gpw:432,he:18},
+
   {yr:2033,lb:"2033",wks:52,gpw:504,he:21},
+
   {yr:2034,lb:"2034",wks:52,gpw:576,he:24},
+
   {yr:2035,lb:"2035",wks:52,gpw:648,he:27}
+
 ];
+
 function qe(yi,wk,tw){return wk===13||wk===26||wk===39||wk===tw;}
+
 function isMonthEnd(wk,tw){return wk%CM_WEEKS===0||wk===tw;}
+
 function collNetProfit(srcAW,cmAccr,li){
+
   var wh=srcAW.wh;if(wh<=BTH)return 0;
+
   var fullNP=srcAW.gm-srcAW.wbn-srcAW.ip-(srcAW.ptx+srcAW.stx)-SW_WK-srcAW.mk-cmAccr-li;
+
   var ef=(wh-BTH)/wh;return Math.max(0,fullNP*ef);
+
 }
+
+function hiringEvents(){
+
+  if(CUSTOM_EVENTS)return CUSTOM_EVENTS;
+
+  var gw=0,ystart={},i;
+
+  for(i=0;i<YRS.length;i++){ystart[YRS[i].yr]=gw+1;gw+=YRS[i].wks;}
+
+  var ev=[[1,FOUNDERS,false]];
+
+  for(var y=SALES_START_YEAR;y<=YRS[YRS.length-1].yr;y++)ev.push([ystart[y],SALES_PER_YEAR,true]);
+
+  return ev;
+
+}
+
 function baw(){
-  var all=[],ewh=0,tp=0,em=0;
+
+  var all=[],tp=0,em=0,gwk=0,EV=hiringEvents();
+
   for(var i=0;i<YRS.length;i++){
-    var Y=YRS[i],sw=ewh,hc=Y.he*60000/52,dt=WKD[String(Y.yr)]||[];
+
+    var Y=YRS[i],dt=WKD[String(Y.yr)]||[];
+
     for(var w=1;w<=Y.wks;w++){
-      var mk=mkWk(em),dl=Y.sw?Y.sw-1:0;
-      var wh=sw+Y.gpw*Math.max(0,w-dl);
-      var wr=wh*BR,wp=wh*PR,fw=gsal(wh)*2/52,ip=fw+hc;
-      var ptx=wp*PT,stx=ip*PT,cp=Math.ceil(wh/NW),np=Math.max(0,cp-tp);
+
+      gwk++;var mk=mkWk(em),wh=0,spc=0,fc=0,e,ten;
+
+      for(var k=0;k<EV.length;k++){e=EV[k];ten=gwk-e[0]+1;if(ten>SALES_ZERO_WKS)wh+=e[1]*SALES_GROWTH*(ten-SALES_ZERO_WKS);if(e[0]<=gwk){if(e[2])spc+=e[1];else fc+=e[1];}}
+
+      var hc=spc*75000/52;
+
+      var wr=wh*BR,wp=wh*PR,fw=gsal(wh)*fc/52,ip=fw+hc;
+
+      var ptx=wp*PT_PROV,stx=ip*PT_INT,cp=Math.ceil(wh/NW),np=Math.max(0,cp-tp);
+
       var wpc=np*PC3,wdp=cp*SH*DP,wbg=np*BGC,waf=wbg*BGR,wbn=wbg*(1-BGR);
+
       tp=Math.max(tp,cp);
+
       all.push({yi:i,yr:Y.yr,wk:w,dt:dt[w-1]||("Wk "+w),
+
         wh:wh,wr:wr,wp:wp,gm:wh*GM,ip:ip,fw:fw,hc:hc,ptx:ptx,stx:stx,
+
         cp:cp,cl:Math.round(wh/CW*10)/10,wpc:wpc,wdp:wdp,np:np,wbg:wbg,waf:waf,wbn:wbn,
+
         inv:wr,imm:wpc+wdp+waf,out:wp+ptx+ip+stx+wbg+SW_WK+mk,
-        mk:mk,hasNFstaff:Y.he>0,founderSalAnn:gsal(wh)});
+
+        mk:mk,hasNFstaff:spc>0,founderSalAnn:gsal(wh),sp:spc});
+
       em+=12/52;
+
     }
-    ewh=sw+Y.gpw*Y.wks;
+
   }
+
   return all;
+
 }
+
 function bcf(AW){
+
   var cf=[],cash=0,ar=0,bp=0,loc=0,qna=0,lcf=0,cmPool=0;
+
   for(var i=0;i<AW.length;i++){
+
     var w=AW[i],tw=YRS[w.yi].wks;
+
     var col=i>=N60?AW[i-N60].inv:0,colHrs=i>=N60?AW[i-N60].wh:0;
-    var cmAccr=0;if(w.hasNFstaff&&colHrs>0)cmAccr=colHrs*CM_RATE;
+
+    var cmAccr=0,he_y=w.sp;
+
+    if(w.hasNFstaff&&he_y>0){var perRep=w.wh/he_y,rate=cliffRate(perRep)*(CM_TARGET_MET?1:0.5),base=(w.wr+w.wpc+w.wdp+w.waf)-(w.wp+w.wbn)-w.ptx;cmAccr=Math.max(0,base)*rate;}
+
     cmPool+=cmAccr;var cmPay=0;
+
     if(w.hasNFstaff&&isMonthEnd(w.wk,tw)){cmPay=cmPool;cmPool=0;}
+
     var li=loc*(LR/52),cnp=0;
+
     if(i>=N60)cnp=collNetProfit(AW[i-N60],cmAccr,li);
+
     var ba=cnp*BPC;bp+=ba;var bpay=0;
+
     if(qe(w.yi,w.wk,tw)){bpay=bp;bp=0;}
+
     var wni=w.gm-w.wbn-w.ip-(w.ptx+w.stx)-li-bpay-cmPay-SW_WK-w.mk;
+
     qna+=wni;var tpay=0;
+
     if(qe(w.yi,w.wk,tw)){var ti2=qna-lcf;if(ti2>0){tpay=ti2*TR;lcf=0;}else{lcf=-ti2;tpay=0;}qna=0;}
+
     var cin=col+w.imm,tot=w.out+bpay+li+tpay+cmPay,net=cin-tot;
+
     cash+=net;var ld=0,lr2=0;
+
     if(cash<0){ld=-cash;loc+=ld;cash=0;}else if(loc>0){lr2=Math.min(cash,loc);loc-=lr2;cash-=lr2;}
+
     ar=ar+w.inv-col;
+
     cf.push({yi:w.yi,yr:w.yr,wk:w.wk,dt:w.dt,wh:w.wh,inv:w.inv,imm:w.imm,col:col,colHrs:colHrs,cin:cin,
+
       out:w.out,bpay:bpay,li:li,ld:ld,lr:lr2,loc:loc,tpay:tpay,tot:tot,net:net,cash:cash,ar:ar,
+
       ba:ba,cnp:cnp,cp:w.cp,cl:w.cl,cmAccr:cmAccr,cmPay:cmPay,mk:w.mk});
+
   }
+
   return cf;
+
 }
+
 function byr(AW,CF){
+
   var yrs=[];
+
   for(var i=0;i<YRS.length;i++){
+
     var Y=YRS[i],cfy=[],awy=[];
+
     for(var j=0;j<CF.length;j++)if(CF[j].yi===i)cfy.push(CF[j]);
+
     for(var j=0;j<AW.length;j++)if(AW[j].yi===i)awy.push(AW[j]);
+
     var ewh=awy[awy.length-1].wh;
+
     var yH=0,yR=0,yP=0,yG=0,yI=0,yFW=0,yHC=0,yPC=0,yDP=0,ySH=0,yPT=0;
-    var yBG=0,yAF=0,yBN=0,yBo=0,yBA=0,yLI=0,yTx=0,yCM=0,yMK=0;
+
+    var yBG=0,yAF=0,yBN=0,yBo=0,yBA=0,yLI=0,yTx=0,yCM=0,yMK=0,yPTp=0,yPTi=0;
+
     var wks=[],qd=[],qb=0,qa=0;
+
     var tHrs=0,tRev=0,tPay=0,tGM=0,tPC=0,tDP=0,tAF=0,tBG=0,tPT=0,tIP=0,tSW=0,tCM=0,tMK=0,tLI=0,tBO=0,tTX=0,tNet=0;
+
     var fSalMin=9999999,fSalMax=0;
+
     for(var w=0;w<cfy.length;w++){
+
       var cf=cfy[w],aw=awy[w];
+
       yH+=aw.wh;yR+=aw.wr;yP+=aw.wp;yG+=aw.gm;yI+=aw.ip;yFW+=aw.fw;yHC+=aw.hc;
+
       yPC+=aw.wpc;yDP+=aw.wdp;yBG+=aw.wbg;yAF+=aw.waf;yBN+=aw.wbn;
-      ySH+=aw.cp*SH;yPT+=aw.ptx+aw.stx;yBo+=cf.bpay;yBA+=cf.ba;yLI+=cf.li;yTx+=cf.tpay;
+
+      ySH+=aw.cp*SH;yPT+=aw.ptx+aw.stx;yPTp+=aw.ptx;yPTi+=aw.stx;yBo+=cf.bpay;yBA+=cf.ba;yLI+=cf.li;yTx+=cf.tpay;
+
       yCM+=cf.cmPay;yMK+=aw.mk;qb+=cf.bpay;qa+=cf.ba;
+
       if(aw.founderSalAnn<fSalMin)fSalMin=aw.founderSalAnn;
+
       if(aw.founderSalAnn>fSalMax)fSalMax=aw.founderSalAnn;
+
       var eq=qe(i,cf.wk,Y.wks);
+
       if(eq){qd.push({q:qd.length+1,bonus:qb,acc:qa,tax:cf.tpay});qb=0;qa=0;}
+
       var wn=aw.gm-aw.wbn-aw.ip-(aw.ptx+aw.stx)-cf.bpay-cf.li-cf.tpay-cf.cmPay-SW_WK-aw.mk;
+
       tHrs+=aw.wh;tRev+=aw.wr;tPay+=aw.wp;tGM+=aw.gm;tPC+=aw.wpc;tDP+=aw.wdp;tAF+=aw.waf;tBG+=aw.wbg;
+
       tPT+=aw.ptx+aw.stx;tIP+=aw.ip;tSW+=SW_WK;tCM+=cf.cmPay;tMK+=aw.mk;tLI+=cf.li;tBO+=cf.bpay;tTX+=cf.tpay;tNet+=wn;
+
       wks.push({wk:cf.wk,dt:cf.dt,hrs:aw.wh,rev:aw.wr,pay:aw.wp,gm:aw.gm,ip:aw.ip,fw:aw.fw,hc:aw.hc,
-        pt:aw.ptx+aw.stx,bpay:cf.bpay,li:cf.li,tpay:cf.tpay,net:wn,nu:aw.cp,cl:aw.cl,pc:aw.wpc,dp:aw.wdp,
+
+        pt:aw.ptx+aw.stx,ptp:aw.ptx,pti:aw.stx,bpay:cf.bpay,li:cf.li,tpay:cf.tpay,net:wn,nu:aw.cp,cl:aw.cl,pc:aw.wpc,dp:aw.wdp,
+
         np:aw.np,bg:aw.wbg,af:aw.waf,bn:aw.wbn,eh:Math.max(0,aw.wh-BTH),
+
         cmPay:cf.cmPay,cmAccr:cf.cmAccr,mk:aw.mk,cnp:cf.cnp,ba:cf.ba,founderSalAnn:aw.founderSalAnn});
+
     }
-    var ySW=SW_WK*Y.wks,tr=yR+yPC+yDP+yAF,cor=yP+yBN,gp=tr-cor;
-    var opex=yI+yPT+yCM+ySW+yMK,noi=gp-opex,nai=noi-yLI,nab=nai-yBo,nf=nab-yTx;
-    yrs.push({yr:Y.yr,lb:Y.lb,he:Y.he,wks:Y.wks,ewh:ewh,tH:yH,tS:ySH,rev:yR,pay:yP,gm:yG,ti:yI,fw:yFW,hc:yHC,
-      pt:yPT,noi:noi,li:yLI,nai:nai,bo:yBo,ba:yBA,nab:nab,tx:yTx,nf:nf,
+
+    var ySW=SW_WK*Y.wks,tr=yR+yPC+yDP+yAF,cor=yP+yBN+yPTp,gp=tr-cor;
+
+    var opex=yI+yPTi+yCM+ySW+yMK,noi=gp-opex,nai=noi-yLI,nab=nai-yBo,nf=nab-yTx;
+
+    yrs.push({yr:Y.yr,lb:Y.lb,he:awy[awy.length-1].sp,wks:Y.wks,ewh:ewh,tH:yH,tS:ySH,rev:yR,pay:yP,gm:yG,ti:yI,fw:yFW,hc:yHC,
+
+      pt:yPT,ptp:yPTp,pti:yPTi,noi:noi,li:yLI,nai:nai,bo:yBo,ba:yBA,nab:nab,tx:yTx,nf:nf,
+
       pcr:yPC,dpr:yDP,bgr:yBG,afr:yAF,bnr:yBN,sw:ySW,cm:yCM,mk:yMK,
+
       tr:tr,cor:cor,gp:gp,opex:opex,
+
       nu:Math.ceil(ewh/NW),cl:Math.round(ewh/CW*10)/10,fSalMin:fSalMin,fSalMax:fSalMax,wks2:wks,qd:qd,
+
       tot:{hrs:tHrs,rev:tRev,pay:tPay,gm:tGM,pc:tPC,dp:tDP,af:tAF,bg:tBG,pt:tPT,ip:tIP,sw:tSW,cm:tCM,mk:tMK,li:tLI,bo:tBO,tx:tTX,net:tNet}});
+
   }
+
   return yrs;
+
 }
 
 var AW,CF,D;
+
 var aY=0,aPL=0,aCF=0,aBN=0,aMX=0,aWK=0,CH={};
+
 function rebuild(){AW=baw();CF=bcf(AW);D=byr(AW,CF);renderAll();}
+
 function renderAll(){rtabs();rsb(D[aY]);rtbl(D[aY]);rpltabs();rpl(D[aPL]);rcftabs();rbntabs();rbeCallout();}
 
 function F(n){var s=n<0?"-":"",a=Math.abs(n);if(a>=1e9)return s+"$"+(a/1e9).toFixed(2)+"B";if(a>=1e6)return s+"$"+(a/1e6).toFixed(1)+"M";if(a>=1e3)return s+"$"+(a/1e3).toFixed(0)+"K";return s+"$"+a.toFixed(0);}
+
 function Fd(n){return(n<0?"-$":"$")+Math.abs(n).toLocaleString(undefined,{maximumFractionDigits:0});}
+
 function Fp(n){return(isNaN(n)?0:n).toFixed(1)+"%";}
+
 function L(n){return Math.round(n).toLocaleString();}
+
 function fK(v){var a=Math.abs(v);if(a===0)return "$0";if(a<1000)return(v<0?"-$":"$")+Math.round(a);return(v<0?"-$":"$")+Math.round(a/1000)+"K";}
+
 function fP(v){return v+"%";}
+
 function mkC(id,cfg){if(CH[id])CH[id].destroy();CH[id]=new Chart(document.getElementById(id),cfg);}
 
 var CP={rev:"rgba(30,95,166,0.82)",rev2:"rgba(30,95,166,0.50)",gp:"rgba(22,163,74,0.82)",noi:"rgba(22,163,74,0.65)",cor:"rgba(220,38,38,0.75)",opx:"rgba(217,119,6,0.80)",opx2:"rgba(217,119,6,0.50)",net:"rgba(22,163,74,0.88)",netloss:"rgba(220,38,38,0.70)",obl:"rgba(124,58,237,0.80)",obl2:"rgba(124,58,237,0.55)",dbt:"rgba(180,83,9,0.80)",dbt2:"rgba(180,83,9,0.50)",cash:"rgba(22,163,74,0.80)",ar:"rgba(217,119,6,0.80)"};
 
 /* ---- AI PANEL ---- */
+
 var aiOpen=false;
+
 function toggleAI(){
+
   aiOpen=!aiOpen;
+
   document.getElementById("aiPanel").classList.toggle("open",aiOpen);
+
 }
+
 function switchAITab(tab,el){
+
   document.querySelectorAll(".ai-tab").forEach(function(t){t.classList.remove("active");});
+
   el.classList.add("active");
+
   document.querySelectorAll(".ai-section").forEach(function(s){s.classList.remove("active");});
+
   document.getElementById("ai-"+tab).classList.add("active");
+
 }
 
 function buildModelSnapshot(){
+
   if(!D||!D.length)return "";
+
   var yr1=D[0],yr5=D[4],yr10=D[9];
+
   var cumNF=0;for(var i=0;i<D.length;i++)cumNF+=D[i].nf;
+
   var peakLOC=0,cfPosWk=null;
+
   for(var i=0;i<CF.length;i++){if(CF[i].loc>peakLOC)peakLOC=CF[i].loc;if(cfPosWk===null&&CF[i].cash>0&&CF[i].loc===0)cfPosWk=CF[i];}
+
   var breakevenYr=null,run=0;
+
   for(var i=0;i<D.length;i++){run+=D[i].nf;if(breakevenYr===null&&run>=0){breakevenYr=D[i].lb;break;}}
+
   var snap="MEDICAL TALENT PRN DIVISION - LIVE MODEL SNAPSHOT\n\n";
+
   snap+="ASSUMPTIONS: Bill Rate $"+BR+"/hr | Pay Rate $"+PR+"/hr | Gross Margin $"+GM+"/hr\n";
+
   snap+="Bonus Pool: "+(BPC*100).toFixed(0)+"% of net profit above "+L(BTH)+" hrs/wk threshold | LOC APR: "+(LR*100).toFixed(1)+"% | Tax Rate: "+(TR*100).toFixed(0)+"%\n";
-  snap+="Growth: 2026 +"+YRS[0].gpw+" hrs/wk | 2027+ +"+YRS[1].gpw+" hrs/wk/yr\n\n";
-  snap+="YEAR 1 (2026): Revenue "+F(yr1.tr)+" | Gross Profit "+F(yr1.gp)+" ("+(yr1.tr>0?(yr1.gp/yr1.tr*100).toFixed(1):0)+"%) | Net Income "+F(yr1.nf)+" | Staff: "+(2+yr1.he)+"\n";
-  snap+="YEAR 5 (2030): Revenue "+F(yr5.tr)+" | Gross Profit "+F(yr5.gp)+" ("+(yr5.tr>0?(yr5.gp/yr5.tr*100).toFixed(1):0)+"%) | Net Income "+F(yr5.nf)+" | Staff: "+(2+yr5.he)+"\n";
-  snap+="YEAR 10 (2035): Revenue "+F(yr10.tr)+" | Gross Profit "+F(yr10.gp)+" ("+(yr10.tr>0?(yr10.gp/yr10.tr*100).toFixed(1):0)+"%) | Net Income "+F(yr10.nf)+" | Staff: "+(2+yr10.he)+"\n\n";
+
+  snap+="Growth Engine: "+FOUNDERS+" founder-producers at launch + "+SALES_PER_YEAR+" salespeople/yr from 2027; each ramps 0 hrs for "+SALES_ZERO_WKS+" wks then +"+SALES_GROWTH+" hrs/wk\n\n";
+
+  snap+="YEAR 1 (2026): Revenue "+F(yr1.tr)+" | Gross Profit "+F(yr1.gp)+" ("+(yr1.tr>0?(yr1.gp/yr1.tr*100).toFixed(1):0)+"%) | Net Income "+F(yr1.nf)+" | Staff: "+(FOUNDERS+yr1.he)+"\n";
+
+  snap+="YEAR 5 (2030): Revenue "+F(yr5.tr)+" | Gross Profit "+F(yr5.gp)+" ("+(yr5.tr>0?(yr5.gp/yr5.tr*100).toFixed(1):0)+"%) | Net Income "+F(yr5.nf)+" | Staff: "+(FOUNDERS+yr5.he)+"\n";
+
+  snap+="YEAR 10 (2035): Revenue "+F(yr10.tr)+" | Gross Profit "+F(yr10.gp)+" ("+(yr10.tr>0?(yr10.gp/yr10.tr*100).toFixed(1):0)+"%) | Net Income "+F(yr10.nf)+" | Staff: "+(FOUNDERS+yr10.he)+"\n\n";
+
   snap+="10-YEAR CUMULATIVE: Total Revenue "+F(D.reduce(function(a,d){return a+d.tr;},0))+" | Net Income "+F(cumNF)+" | Bonus Paid "+F(D.reduce(function(a,d){return a+d.bo;},0))+" | Tax Paid "+F(D.reduce(function(a,d){return a+d.tx;},0))+"\n\n";
+
   snap+="LIQUIDITY: Peak LOC Balance "+F(peakLOC)+" | First CF-Positive Week: "+(cfPosWk?cfPosWk.yr+" Wk "+cfPosWk.wk+" ("+cfPosWk.dt+")":"not reached")+" | Cumulative Breakeven Year: "+(breakevenYr||"beyond 10-yr window")+"\n\n";
+
   snap+="YEAR-BY-YEAR SUMMARY:\n";
+
   for(var i=0;i<D.length;i++){
+
     var d=D[i];
+
     snap+="  "+d.lb+": Rev "+F(d.tr)+" | GP "+F(d.gp)+" | NOI "+F(d.noi)+" | Net "+F(d.nf)+" | Bonus "+F(d.bo)+" | Tax "+F(d.tx)+" | EOY Providers "+d.nu+" | EOY Clients "+d.cl+"\n";
+
   }
+
   return snap;
+
 }
 
 function genNarrative(){
+
  var btn=document.getElementById("narBtn");
+
  var res=document.getElementById("narResult");
+
  var cpy=document.getElementById("narCopy");
+
  btn.disabled=true;btn.textContent="Generating...";
+
  res.style.display="block";res.className="ai-result loading";res.textContent="Writing narrative from live model data...";
+
  cpy.style.display="none";
+
  var snap=buildModelSnapshot();
+
  var prompt="You are a financial analyst for Medical Talent, a PRN (per diem) medical staffing company. Using ONLY the data provided below, write a balanced, professional executive narrative suitable for internal planning and investor/lender briefings.\n\nThe narrative should include:\n1. A compelling business overview and market opportunity (2-3 sentences)\n2. Revenue model and key economics ($"+BR+"/hr bill, $"+PR+"/hr pay, $"+GM+"/hr gross margin)\n3. Growth trajectory summary with specific numbers from the data\n4. Path to profitability and cash flow milestones\n5. Capital requirements (LOC usage)\n6. Risks and mitigants (balanced, not overly promotional)\n7. A concise 10-year outlook\n\nTone: Balanced and professional. Grounded in the numbers. Honest about the early-stage losses while showing the long-term trajectory.\n\nFormat with clear section headers. Use $ figures from the data exactly.\n\n"+snap;
+
  fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
+
  .then(function(r){
+
    if(!r.ok){return r.json().then(function(d){throw new Error(d.error||"Server error "+r.status);});}
+
    return r.json();
+
  })
+
  .then(function(data){
+
    if(data.error){
+
      res.className="ai-result";res.textContent="AI Error: "+data.error;
+
      btn.disabled=false;btn.textContent="Generate Narrative";
+
      return;
+
    }
+
    var txt=data.text||"Unable to generate narrative. Please try again.";
+
    res.className="ai-result";res.textContent=txt;
+
    btn.disabled=false;btn.textContent="Regenerate Narrative";
+
    cpy.style.display="inline-block";
+
  })
+
  .catch(function(err){
+
    res.className="ai-result";res.textContent="Error: "+err.message;
+
    btn.disabled=false;btn.textContent="Generate Narrative";
+
  });
+
 }
+
 function copyNarrative(){
+
   var txt=document.getElementById("narResult").textContent;
+
   navigator.clipboard.writeText(txt).then(function(){
+
     var b=document.getElementById("narCopy");b.textContent="Copied!";setTimeout(function(){b.textContent="Copy to Clipboard";},2000);
+
   });
+
 }
 
 var qaHistory=[];
+
 function askStarter(el){document.getElementById("qaInput").value=el.textContent;sendQA();}
+
 function sendQA(){
+
  var inp=document.getElementById("qaInput");
+
  var q=inp.value.trim();if(!q)return;
+
  var send=document.getElementById("qaSend");
+
  var chat=document.getElementById("aiChat");
+
  inp.value="";send.disabled=true;
+
  var umsg=document.createElement("div");umsg.className="ai-msg user";umsg.textContent=q;chat.appendChild(umsg);
+
  var amsg=document.createElement("div");amsg.className="ai-msg assistant loading";amsg.textContent="Thinking...";chat.appendChild(amsg);
+
  chat.scrollTop=chat.scrollHeight;
+
  var snap=buildModelSnapshot();
+
  var systemPrompt="You are a financial analyst AI assistant for Medical Talent PRN Division. You have deep knowledge of this specific financial model. Answer questions using ONLY the data provided. Be concise, specific, and use exact numbers from the model. If a question is not answerable from the model data, say so clearly.\n\n"+snap;
+
  qaHistory.push({role:"user",content:q});
+
  var msgs=qaHistory.slice(-10);
+
  fetch("https://med-talent-prn-10-year-model.vercel.app/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:systemPrompt+" "+msgs.map(function(m){return m.role+": "+m.content}).join(" ")})})
+
  .then(function(r){
+
    if(!r.ok){return r.json().then(function(d){throw new Error(d.error||"Server error "+r.status);});}
+
    return r.json();
+
  })
+
  .then(function(data){
+
    if(data.error){
+
      amsg.className="ai-msg assistant";amsg.textContent="AI Error: "+data.error;
+
      send.disabled=false;chat.scrollTop=chat.scrollHeight;
+
      return;
+
    }
+
    var txt=data.text||"Unable to answer. Please try again.";
+
    amsg.className="ai-msg assistant";amsg.textContent=txt;
+
    qaHistory.push({role:"assistant",content:txt});
+
    send.disabled=false;chat.scrollTop=chat.scrollHeight;
+
  })
+
  .catch(function(err){
+
    amsg.className="ai-msg assistant";amsg.textContent="Error: "+err.message;
+
    send.disabled=false;
+
  });
+
 }
+
 function rbeCallout(){
+
   var cfPos=null,cumBreak=null,worstWk=null,worstVal=0,run=0;
+
   for(var i=0;i<CF.length;i++){
+
     if(cfPos===null&&CF[i].cash>0&&CF[i].loc===0)cfPos=CF[i];
+
     if(CF[i].net<worstVal){worstVal=CF[i].net;worstWk=CF[i];}
+
   }
+
   for(var i=0;i<D.length;i++){run+=D[i].nf;if(cumBreak===null&&run>=0){cumBreak=D[i];break;}}
+
   var scope='<div class="be-scope">10-Year View</div>';var h="";
+
   if(cfPos){h+='<div class="be-card pos">'+scope+'<div class="be-lbl">First Cash-Flow Positive Week</div><div class="be-val c-net">'+cfPos.yr+' Wk '+cfPos.wk+'</div><div class="be-sub">'+cfPos.dt+' - Cash: '+F(cfPos.cash)+'</div></div>';}
+
   else{h+='<div class="be-card neg">'+scope+'<div class="be-lbl">Cash-Flow Positive</div><div class="be-val c-neg">Not yet in model</div><div class="be-sub">LOC covers all deficits</div></div>';}
+
   if(cumBreak){h+='<div class="be-card pos">'+scope+'<div class="be-lbl">Cumulative Breakeven Year</div><div class="be-val c-net">'+cumBreak.lb+'</div><div class="be-sub">Running net income turns positive</div></div>';}
+
   else{h+='<div class="be-card neg">'+scope+'<div class="be-lbl">Cumulative Breakeven</div><div class="be-val c-neg">Beyond 10-year window</div><div class="be-sub">Cumulative losses persist</div></div>';}
+
   if(worstWk){h+='<div class="be-card warn">'+scope+'<div class="be-lbl">Worst Single Week (Cash)</div><div class="be-val c-dbt">'+worstWk.yr+' Wk '+worstWk.wk+'</div><div class="be-sub">'+worstWk.dt+' - Net: '+F(worstWk.net)+' | LOC Peak: '+F(worstWk.loc)+'</div></div>';}
+
   document.getElementById("be-callout").innerHTML=h;
+
 }
+
 function rtabs(){
+
   var h="";
-  for(var i=0;i<D.length;i++){var d=D[i];h+='<div class="etab'+(i===aY?" active":"")+'" onclick="pk('+i+')"><div class="yn">'+d.lb+'</div><div class="yr">'+F(d.rev)+'</div><div class="ye">'+(2+d.he)+' staff</div></div>';}
+
+  for(var i=0;i<D.length;i++){var d=D[i];h+='<div class="etab'+(i===aY?" active":"")+'" onclick="pk('+i+')"><div class="yn">'+d.lb+'</div><div class="yr">'+F(d.rev)+'</div><div class="ye">'+(FOUNDERS+d.he)+' staff</div></div>';}
+
   document.getElementById("tabs").innerHTML=h;
+
 }
+
 function rsb(d){
+
   var nc=d.nf>=0?"c-net":"c-neg";
+
   var fSalLbl=d.fSalMin===d.fSalMax?("$"+(d.fSalMin/1000).toFixed(0)+"K/ea"):("$"+(d.fSalMin/1000).toFixed(0)+"K->$"+(d.fSalMax/1000).toFixed(0)+"K/ea");
+
   document.getElementById("sb1").innerHTML=
+
     '<div class="sb"><div class="sl">Wk-End Hrs</div><div class="sv c-neu">'+L(d.ewh)+'</div></div>'+
+
     '<div class="sb"><div class="sl">YTD Cum Hrs</div><div class="sv c-neu">'+L(d.tH)+'</div></div>'+
+
     '<div class="sb"><div class="sl">Total Shifts</div><div class="sv c-neu">'+L(d.tS)+'</div></div>'+
+
     '<div class="sb t-rev"><div class="sl">Staffing Rev</div><div class="sv c-rev">'+F(d.rev)+'</div></div>'+
+
     '<div class="sb t-net"><div class="sl">Gross Profit</div><div class="sv c-net">'+F(d.gp)+'</div></div>'+
+
     '<div class="sb t-rev"><div class="sl">Paycard Fees</div><div class="sv c-rev">'+F(d.pcr)+'</div></div>';
+
   document.getElementById("sb2").innerHTML=
+
     '<div class="sb t-rev"><div class="sl">Daily Pay Fees</div><div class="sv c-rev">'+F(d.dpr)+'</div></div>'+
+
     '<div class="sb t-rev"><div class="sl">Admin Fee Rev</div><div class="sv c-rev">'+F(d.afr)+'</div></div>'+
+
     '<div class="sb t-cor"><div class="sl">BGC Net Cost (20%)</div><div class="sv c-cor">'+F(d.bnr)+'</div></div>'+
-    '<div class="sb t-opx"><div class="sl">Staff Commission</div><div class="sv c-opx">'+F(d.cm)+'</div></div>'+
+
+    '<div class="sb t-opx"><div class="sl">Salesperson Commission</div><div class="sv c-opx">'+F(d.cm)+'</div></div>'+
+
     '<div class="sb t-opx"><div class="sl">Software ($2,650/mo)</div><div class="sv c-opx">'+F(d.sw)+'</div></div>'+
+
     '<div class="sb t-opx"><div class="sl">Marketing Budget</div><div class="sv c-opx">'+F(d.mk)+'</div></div>';
+
   document.getElementById("sb3").innerHTML=
+
     '<div class="sb"><div class="sl">Providers EOY</div><div class="sv c-rev">'+d.nu+'</div></div>'+
+
     '<div class="sb"><div class="sl">Clients EOY</div><div class="sv c-rev">'+d.cl+'</div></div>'+
-    '<div class="sb t-opx"><div class="sl">Payroll Tax (15%)</div><div class="sv c-opx">'+F(d.pt)+'</div></div>'+
+
+    '<div class="sb t-opx"><div class="sl">Payroll Tax (Prov+Int)</div><div class="sv c-opx">'+F(d.pt)+'</div></div>'+
+
     '<div class="sb t-opx"><div class="sl">Founder Salaries</div><div class="sv c-opx">'+F(d.fw)+'</div><div class="sv2">'+fSalLbl+'</div></div>'+
+
     '<div class="sb t-net"><div class="sl">Net Op Income</div><div class="sv '+(d.noi>=0?"c-net":"c-neg")+'">'+F(d.noi)+'</div></div>'+
+
     '<div class="sb t-dbt"><div class="sl">LOC Interest</div><div class="sv c-dbt">'+F(d.li)+'</div></div>'+
+
     '<div class="sb t-obl"><div class="sl">Net Income (After Tax)</div><div class="sv '+nc+'">'+F(d.nf)+'</div></div>';
+
 }
+
 function exportCSV(){
+
   var d=D[aY];
+
   var hdr=["Week","Date","Cum Hrs","Providers","Clients","Staffing Rev","Gross Margin","Paycard Fee","Daily Pay Fee","Admin Fee","BGC Cost","Payroll Tax","Founder Sal","Staff Sal","Software","Commission","Marketing","LOC Interest","Bonus","Tax","Net Income","Founder Sal/Tier (Ann/Each)"];
+
   var rows=[hdr];
+
   for(var i=0;i<d.wks2.length;i++){
+
     var w=d.wks2[i];
+
     rows.push(["Wk "+w.wk,w.dt,w.hrs,w.nu,w.cl,w.rev.toFixed(2),w.gm.toFixed(2),w.pc.toFixed(2),w.dp.toFixed(2),w.af.toFixed(2),w.bg.toFixed(2),w.pt.toFixed(2),w.fw.toFixed(2),(w.hc||0).toFixed(2),SW_WK.toFixed(2),w.cmPay.toFixed(2),w.mk.toFixed(2),w.li.toFixed(2),w.bpay.toFixed(2),w.tpay.toFixed(2),w.net.toFixed(2),(w.founderSalAnn||0).toFixed(0)]);
+
   }
+
   var csv=rows.map(function(r){return r.map(function(c){return '"'+c+'"';}).join(",");}).join("\n");
+
   var blob=new Blob([csv],{type:"text/csv"});var url=URL.createObjectURL(blob);
+
   var a=document.createElement("a");a.href=url;a.download="MedicalTalent_"+d.lb+"_Weekly.csv";
+
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+
 }
+
 var allRows=[];
+
 function rtbl(d){allRows=d.wks2;document.getElementById("wkSearch").value="";renderTblRows(allRows,"");}
+
 function renderTblRows(rows,q){
+
   var thead='<table><thead><tr><th>Week</th><th>Cum Hrs</th><th>Providers</th><th>Clients</th><th class="hrev">Staffing Rev</th><th class="hnet">Gross Margin</th><th class="hrev">Paycard Fee</th><th class="hrev">Daily Pay Fee</th><th class="hrev">Admin Fee</th><th class="hcor">BGC Cost</th><th class="hopx">Payroll Tax</th><th class="hopx">Internal Cost</th><th class="hopx">Software</th><th class="hopx">Commission</th><th class="hopx">Marketing</th><th class="hdbt">LOC Interest</th><th class="hobl">Bonus</th><th class="hobl">Tax</th><th class="hnet">Net Income</th></tr></thead><tbody>';
+
   var body="",ql=q.toLowerCase(),vis=[];
+
   for(var w=0;w<rows.length;w++){
+
     var wk=rows[w];
+
     if(ql&&wk.dt.toLowerCase().indexOf(ql)<0&&("wk "+wk.wk).indexOf(ql)<0)continue;
+
     vis.push(wk);
+
     var nc=wk.net>=0?"c-net":"c-neg";
+
     var eq=qe(aY,wk.wk,D[aY].wks),ht=wk.tpay>0,hb=wk.bpay>0,hc=wk.cmPay>0;
+
     var rc=ht?"tr2":(hb?"bp":(eq?"qr":""));
+
     var tierLbl="";
+
     if(w>0&&rows[w-1].founderSalAnn&&wk.founderSalAnn!==rows[w-1].founderSalAnn)tierLbl=' <span style="background:#1E5FA6;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px">F-TIER $'+(wk.founderSalAnn/1000).toFixed(0)+'K</span>';
+
     body+='<tr'+(rc?' class="'+rc+'"':'')+'>'+
+
       '<td>Wk '+wk.wk+'&nbsp;<span style="color:#5A6178;font-weight:400;font-size:11px">'+wk.dt+'</span>'+tierLbl+
+
       (hc?' <span style="background:#D97706;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px">COMM</span>':'')+
+
       (hb?' <span style="background:#7C3AED;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px">BONUS</span>':'')+
+
       (ht?' <span style="background:#7C3AED;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px">TAX</span>':'')+'</td>'+
+
       '<td>'+L(wk.hrs)+'</td><td>'+wk.nu+'</td><td>'+wk.cl+'</td>'+
+
       '<td class="c-rev">'+Fd(wk.rev)+'</td><td class="c-net">'+Fd(wk.gm)+'</td>'+
+
       '<td class="c-rev">'+Fd(wk.pc)+'</td><td class="c-rev">'+Fd(wk.dp)+'</td>'+
+
       '<td class="c-rev">'+Fd(wk.af)+'</td><td class="c-cor">'+Fd(wk.bg)+'</td>'+
+
       '<td class="c-opx">'+Fd(wk.pt)+'</td><td class="c-opx">'+Fd(wk.ip)+'</td>'+
+
       '<td class="c-opx">'+Fd(SW_WK)+'</td><td class="c-opx">'+Fd(wk.cmPay)+'</td>'+
+
       '<td class="c-opx">'+Fd(wk.mk)+'</td><td class="c-dbt">'+Fd(wk.li)+'</td>'+
+
       '<td class="c-obl">'+Fd(wk.bpay)+'</td><td class="c-obl">'+Fd(wk.tpay)+'</td>'+
+
       '<td class="'+nc+'">'+Fd(wk.net)+'</td></tr>';
+
   }
+
   if(!ql&&vis.length>0){
+
     var t=D[aY].tot;
+
     body+='<tr class="tot"><td>ANNUAL TOTAL</td><td>'+L(t.hrs)+'</td><td></td><td></td><td>'+Fd(t.rev)+'</td><td>'+Fd(t.gm)+'</td><td>'+Fd(t.pc)+'</td><td>'+Fd(t.dp)+'</td><td>'+Fd(t.af)+'</td><td>'+Fd(t.bg)+'</td><td>'+Fd(t.pt)+'</td><td>'+Fd(t.ip)+'</td><td>'+Fd(t.sw)+'</td><td>'+Fd(t.cm)+'</td><td>'+Fd(t.mk)+'</td><td>'+Fd(t.li)+'</td><td>'+Fd(t.bo)+'</td><td>'+Fd(t.tx)+'</td><td>'+Fd(t.net)+'</td></tr>';
+
   }
+
   document.getElementById("tbl").innerHTML=thead+body+'</tbody></table>';
+
   var tEl=document.getElementById("tbl");tEl.classList.remove("fade");void tEl.offsetWidth;tEl.classList.add("fade");
+
 }
+
 function filterWks(){renderTblRows(allRows,document.getElementById("wkSearch").value);}
+
 function pk(i){aY=i;rtabs();rsb(D[i]);rtbl(D[i]);}
+
 function gcfy(idx){var a=[];for(var j=0;j<CF.length;j++)if(CF[j].yi===idx)a.push(CF[j]);return a;}
+
 function rcftabs(){
+
   var h="";
-  for(var i=0;i<D.length;i++)h+='<div class="etab'+(i===aCF?" active":"")+'" onclick="pkcf('+i+')"><div class="yn">'+D[i].lb+'</div><div class="yr">'+F(D[i].rev)+'</div><div class="ye">'+(2+D[i].he)+' staff</div></div>';
+
+  for(var i=0;i<D.length;i++)h+='<div class="etab'+(i===aCF?" active":"")+'" onclick="pkcf('+i+')"><div class="yn">'+D[i].lb+'</div><div class="yr">'+F(D[i].rev)+'</div><div class="ye">'+(FOUNDERS+D[i].he)+' staff</div></div>';
+
   document.getElementById("cftabs").innerHTML=h;
+
 }
+
 function rcfk(rows){
+
   var ti=0,to=0,tt=0,ml=0,ww=null,wwv=0;
+
   for(var i=0;i<rows.length;i++){ti+=rows[i].cin;to+=rows[i].tot;tt+=rows[i].tpay;if(rows[i].loc>ml)ml=rows[i].loc;if(rows[i].net<wwv){wwv=rows[i].net;ww=rows[i];}}
+
   var ec=rows[rows.length-1].cash;
+
   document.getElementById("cfk").innerHTML=
+
     '<div class="sb t-net"><div class="sl">YTD Cash In</div><div class="sv c-net">'+F(ti)+'</div></div>'+
+
     '<div class="sb t-cor"><div class="sl">YTD Cash Out</div><div class="sv c-cor">'+F(to)+'</div></div>'+
+
     '<div class="sb t-net"><div class="sv '+(ec>=0?"c-net":"c-neg")+'">'+F(ec)+'</div><div class="sl">Year-End Cash</div></div>'+
+
     '<div class="sb t-dbt"><div class="sl">Peak LOC Balance</div><div class="sv c-dbt">'+F(ml)+'</div></div>'+
+
     '<div class="sb t-obl"><div class="sl">Tax Paid</div><div class="sv c-obl">'+F(tt)+'</div></div>'+
+
     '<div class="sb t-opx"><div class="sl">Worst Week</div><div class="sv c-opx" style="font-size:13px">'+(ww?ww.dt+" ("+F(ww.net)+")":"n/a")+'</div></div>';
+
 }
+
 function rcft(yi){
+
   var rows=gcfy(yi);rcfk(rows);
+
   var h='<thead><tr><th style="text-align:left;padding-left:20px">Week</th><th class="hrev">Invoiced</th><th class="hnet">Collected</th><th class="hrev">Fees+Admin</th><th class="hnet">Cash In</th><th class="hcor">Ops Out</th><th class="hopx">Commission</th><th class="hopx">Marketing</th><th class="hobl">Bonus</th><th class="hdbt">LOC Int</th><th class="hdbt">LOC Draw</th><th class="hdbt">LOC Repay</th><th class="hdbt">LOC Bal</th><th class="hobl">Tax</th><th class="hnet">Net Cash</th><th class="hnet">Cash Bal</th></tr></thead><tbody>';
+
   for(var i=0;i<rows.length;i++){
+
     var r=rows[i],nc2=r.net>=0?"c-net":"c-neg";
+
     var ht=r.tpay>0,hb=r.bpay>0,hl=r.ld>0,hc=r.cmPay>0;
+
     var rc=ht?"tr2":(hb?"bp":(hl?"ld":"pc"));
+
     h+='<tr class="'+rc+'"><td style="color:#1E5FA6;font-weight:700;font-size:12px">Wk '+r.wk+' <span style="color:#5A6178;font-weight:400;font-size:11px">'+r.dt+'</span>'+
+
       (hc?' <span style="background:#D97706;color:#fff;font-size:9px;padding:2px 4px;border-radius:3px">COMM</span>':'')+
+
       (hb?' <span style="background:#7C3AED;color:#fff;font-size:9px;padding:2px 4px;border-radius:3px">BONUS</span>':'')+
+
       (hl?' <span style="background:#B45309;color:#fff;font-size:9px;padding:2px 4px;border-radius:3px">LOC</span>':'')+
+
       (ht?' <span style="background:#7C3AED;color:#fff;font-size:9px;padding:2px 4px;border-radius:3px">TAX</span>':'')+'</td>'+
+
       '<td class="c-rev">'+Fd(r.inv)+'</td><td class="c-net">'+Fd(r.col)+'</td><td class="c-rev">'+Fd(r.imm)+'</td>'+
+
       '<td class="c-net" style="font-weight:700">'+Fd(r.cin)+'</td><td class="c-cor">'+Fd(r.out)+'</td>'+
+
       '<td class="c-opx" style="font-weight:'+(hc?700:400)+'">'+Fd(r.cmPay)+'</td><td class="c-opx">'+Fd(r.mk)+'</td>'+
+
       '<td class="c-obl">'+Fd(r.bpay)+'</td><td class="c-dbt">'+Fd(r.li)+'</td>'+
+
       '<td class="c-dbt" style="font-weight:'+(r.ld>0?700:400)+'">'+Fd(r.ld)+'</td>'+
+
       '<td class="c-net">'+Fd(r.lr)+'</td><td class="c-dbt" style="font-weight:700">'+Fd(r.loc)+'</td>'+
+
       '<td class="c-obl" style="font-weight:'+(ht?700:400)+'">'+Fd(r.tpay)+'</td>'+
+
       '<td class="'+nc2+'" style="font-weight:700">'+Fd(r.net)+'</td><td class="c-net">'+Fd(r.cash)+'</td></tr>';
+
   }
+
   document.getElementById("cft").innerHTML=h+'</tbody>';
+
 }
+
 function rcfch(yi){
+
   var all=[];for(var j=0;j<CF.length;j++)if(CF[j].yi<=yi)all.push(CF[j]);
+
   var lb=[],csh=[],lc=[];for(var j=0;j<all.length;j++){lb.push(all[j].yr+" W"+all[j].wk);csh.push(all[j].cash);lc.push(all[j].loc);}
+
   var lf={font:{family:"DM Sans",size:11}};
+
   mkC("chCP",{type:"line",data:{labels:lb,datasets:[{label:"Cash Balance",data:csh,borderColor:"#16A34A",backgroundColor:"rgba(22,163,74,0.10)",fill:true,tension:0.3,borderWidth:2,pointRadius:0},{label:"LOC Balance",data:lc,borderColor:"#B45309",backgroundColor:"rgba(180,83,9,0.10)",fill:true,tension:0.3,borderWidth:2,pointRadius:0}]},options:{responsive:true,interaction:{mode:"index",intersect:false},scales:{y:{ticks:{callback:fK}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return c.dataset.label+": $"+Math.round(c.raw).toLocaleString();}}}}}});
+
   var yr=gcfy(yi),yl=[],cin=[],out=[],cmp=[],mkt=[],bpd=[],lin=[],tpd=[];
+
   for(var j=0;j<yr.length;j++){yl.push(yr[j].dt);cin.push(yr[j].cin);out.push(yr[j].out);cmp.push(yr[j].cmPay);mkt.push(yr[j].mk);bpd.push(yr[j].bpay);lin.push(yr[j].li);tpd.push(yr[j].tpay);}
+
   mkC("chCF",{type:"bar",data:{labels:yl,datasets:[{label:"Cash In",data:cin,backgroundColor:CP.net,borderRadius:3},{label:"Ops Out",data:out,backgroundColor:CP.cor,borderRadius:3},{label:"Commission",data:cmp,backgroundColor:CP.opx,borderRadius:3},{label:"Marketing",data:mkt,backgroundColor:CP.opx2,borderRadius:3},{label:"Bonus",data:bpd,backgroundColor:CP.obl,borderRadius:3},{label:"LOC Interest",data:lin,backgroundColor:CP.dbt,borderRadius:3},{label:"Tax",data:tpd,backgroundColor:CP.obl2,borderRadius:3}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:fK}}},plugins:{legend:{labels:{font:{family:"DM Sans",size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+": $"+Math.round(c.raw).toLocaleString();}}}}}});
+
   var arl=[];for(var j=0;j<yr.length;j++)arl.push(yr[j].ar);
+
   mkC("chAR",{type:"line",data:{labels:yl,datasets:[{label:"AR Balance",data:arl,borderColor:"#D97706",backgroundColor:"rgba(217,119,6,0.12)",fill:true,tension:0.4,borderWidth:2.5,pointRadius:0}]},options:{responsive:true,scales:{x:{ticks:{maxRotation:45,font:{size:9}}},y:{ticks:{callback:fK}}},plugins:{legend:{labels:{font:{family:"DM Sans",size:11}}},tooltip:{callbacks:{label:function(c){return "AR: $"+Math.round(c.raw).toLocaleString();}}}}}});
+
 }
+
 function pkcf(i){aCF=i;rcftabs();rcft(i);setTimeout(function(){rcfch(i);},50);}
+
 function rpltabs(){
+
   var h="";for(var i=0;i<D.length;i++)h+='<div class="pyt'+(i===aPL?" active":"")+'" onclick="pkpl('+i+')">'+D[i].lb+'</div>';
+
   document.getElementById("pltabs").innerHTML=h;
+
 }
+
 function rpl(d){
+
   var tr=d.tr,cor=d.cor,gp=d.gp,opex=d.opex,noi=d.noi,nai=d.nai,nab=d.nab,nf=d.nf;
+
   var gmp=tr>0?(gp/tr*100):0,nmp=tr>0?(nf/tr*100):0;
+
   function row(l,v,c,ind){return '<tr><td class="lbl"'+(ind?' style="padding-left:40px"':'')+'>'+l+'</td><td class="val '+c+'">'+Fd(v)+'</td></tr>';}
+
   function nt(l){return '<tr><td class="lbl" style="padding-left:40px;color:#5A6178;font-size:12px">'+l+'</td><td></td></tr>';}
+
   function sc(l,cls){return '<tr><td class="ps '+cls+'" colspan="2">'+l+'</td></tr>';}
+
   function tot(l,v,c){return '<tr class="pt"><td class="lbl">'+l+'</td><td class="val '+c+'">'+Fd(v)+'</td></tr>';}
+
   function grd(l,v,c){return '<tr class="pg"><td class="lbl" style="padding-left:24px">'+l+'</td><td class="val '+c+'" style="padding-right:24px">'+Fd(v)+'</td></tr>';}
+
   var mkMoStart=Math.round(d.mk/d.wks*(52/12));
-  var fSalLbl=d.fSalMin===d.fSalMax?"2 founders @ $"+d.fSalMin.toLocaleString()+"/yr each (Tier flat)":"2 founders @ $"+d.fSalMin.toLocaleString()+"->$"+d.fSalMax.toLocaleString()+"/yr each (tiered)";
+
+  var fSalLbl=d.fSalMin===d.fSalMax?FOUNDERS+" founders @ $"+d.fSalMin.toLocaleString()+"/yr each (Tier flat)":FOUNDERS+" founders @ $"+d.fSalMin.toLocaleString()+"->$"+d.fSalMax.toLocaleString()+"/yr each (tiered)";
+
   var h='';
+
   h+=sc('REVENUE','ps-rev');
+
   h+=row('Staffing Revenue ('+L(d.tH)+' hrs @ $'+BR+'/hr)',d.rev,'c-rev',true);
+
   h+=row('Paycard Issue Fees ('+d.nu+' providers x $'+PC3+')',d.pcr,'c-rev',true);
+
   h+=row('Daily Pay Fees ('+L(d.tS)+' shifts x $'+DP+')',d.dpr,'c-rev',true);
+
   h+=row('Admin Fees - BGC Recovery (80% of $'+BGC+'/new provider)',d.afr,'c-rev',true);
+
   h+=tot('Total Revenue',tr,'c-rev');
+
   h+=sc('COST OF REVENUE','ps-cor');
+
   h+=row('Provider Pay ('+L(d.tH)+' hrs @ $'+PR+'/hr)',d.pay,'c-cor',true);
+
+  h+=row('Provider Payroll Tax ('+(PT_PROV*100).toFixed(2)+'% of provider pay)',d.ptp,'c-cor',true);
+
   h+=row('BGC + Drug Screen Net Cost (20% unrecovered)',d.bnr,'c-cor',true);
+
   h+=nt('Gross BGC: '+Fd(d.bgr)+' | Recovered (80%): '+Fd(d.afr)+' | Net to CoR (20%): '+Fd(d.bnr));
+
   h+=tot('Total Cost of Revenue',cor,'c-cor');
+
   h+=sc('GROSS PROFIT','ps-net');
+
   h+=tot('Gross Profit',gp,'c-net');h+=nt('Gross Margin: '+Fp(gmp));
+
   h+=sc('OPERATING EXPENSES','ps-opx');
+
   h+=row('Founder Salaries ('+fSalLbl+')',d.fw,'c-opx',true);
+
   h+=nt('Tier 1: $80K (0-900 hrs/wk) | Tier 2: $100K (901-1300) | Tier 3: $125K (1301-1600) | Tier 4: $150K (1601-1900) | Tier 5: $175K (1900+)');
-  h+=row('Staff Salaries ('+d.he+' staff x $60K/yr)',d.ti-d.fw,'c-opx',true);
-  h+=row('Payroll Tax - Provider Pay ('+(PT*100)+'%)',d.pay*PT,'c-opx',true);
-  h+=row('Payroll Tax - Staff / Founders ('+(PT*100)+'%)',d.ti*PT,'c-opx',true);
-  h+=row('Staff Commission ($0.10/hr on collected hrs, non-founders)',d.cm,'c-opx',true);
-  h+=nt(d.he>0?'Paid monthly on collected hours (Net 60 lag) | '+d.he+' non-founder staff':'N/A in 2026 - no non-founder staff yet');
+
+  h+=row('Staff Salaries ('+d.he+' salespeople x $75K/yr)',d.ti-d.fw,'c-opx',true);
+
+  h+=row('Internal Payroll Tax - Founders + Staff ('+(PT_INT*100).toFixed(2)+'%)',d.pti,'c-opx',true);
+
+  h+=row('Salesperson Commission (cliff % of gross profit net of provider tax)',d.cm,'c-opx',true);
+
+  h+=nt(d.he>0?'Paid monthly | tiered by per-rep hrs: 0-500=0% / 501-2,500=4% / 2,501-5,000=5% / 5,001+=6% | '+d.he+' salespeople (founders excluded)':'N/A in 2026 - no salespeople yet; founders earn no commission');
+
   h+=row('Vars Software ($'+VARS_MO+'/mo x '+d.wks+' wks prorated)',Math.round(VARS_MO*d.wks/4.333),'c-opx',true);
+
   h+=row('Payroll Software ($'+PYRL_MO+'/mo x '+d.wks+' wks prorated)',Math.round(PYRL_MO*d.wks/4.333),'c-opx',true);
+
   h+=row('Marketing Budget (escalating: +$1,000/mo every 6 months)',d.mk,'c-opx',true);
+
   h+=nt('Starts $1,000/mo (Mar 2026) | Blended avg ~$'+mkMoStart.toLocaleString()+'/mo this year');
+
   h+=tot('Total Operating Expenses',opex,'c-opx');
+
   h+=sc('NET OPERATING INCOME','ps-net');h+=tot('Net Operating Income',noi,noi>=0?'c-net':'c-neg');
+
   h+=sc('INTEREST EXPENSE','ps-dbt');
+
   h+=row('LOC Interest ('+(LR*100).toFixed(1)+'% APR on drawn balance)',d.li,'c-dbt',true);
+
   h+=tot('Net Income After Interest',nai,nai>=0?'c-net':'c-neg');
+
   h+=sc('QUARTERLY BONUS POOL','ps-obl');
+
   h+=row('Bonus Paid ('+(BPC*100).toFixed(0)+'% of collected net profit after LOC interest, above '+L(BTH)+' hrs/wk, quarterly)',d.bo,'c-obl',true);
+
   h+=nt('Collected net profit only (Net 60 lag) | LOC interest deducted from bonus basis | Uncollected rolls forward | '+d.qd.length+' quarterly payouts');
+
   h+=tot('Net Income Before Tax',nab,nab>=0?'c-net':'c-neg');
+
   h+=sc('INCOME TAX','ps-obl');
+
   h+=row('Quarterly Income Tax ('+(TR*100).toFixed(0)+'% - loss carryforward applied)',d.tx,'c-obl',true);
+
   h+=grd('NET INCOME',nf,nf>=0?'c-net':'c-neg');h+=nt('Net Margin: '+Fp(nmp));
+
   document.getElementById("plt").innerHTML=h;
+
 }
+
 function pkpl(i){aPL=i;rpltabs();rpl(D[i]);}
+
 function rbntabs(){
+
   var h="";for(var i=0;i<D.length;i++)h+='<div class="etab'+(i===aBN?" active":"")+'" onclick="pkbn('+i+')"><div class="yn">'+D[i].lb+'</div><div class="yr">'+F(D[i].bo)+'</div><div class="ye">bonus paid</div></div>';
+
   document.getElementById("bntabs").innerHTML=h;
+
 }
+
 function rbnk(d){
+
   var qc=d.qd.length,aq=qc>0?d.bo/qc:0;
+
   document.getElementById("bnk").innerHTML=
+
     '<div class="sb t-obl"><div class="sl">Bonus Paid</div><div class="sv c-obl">'+F(d.bo)+'</div></div>'+
+
     '<div class="sb t-obl"><div class="sl">Bonus Accrued</div><div class="sv c-obl">'+F(d.ba)+'</div></div>'+
+
     '<div class="sb t-obl"><div class="sl">Avg Quarterly Bonus</div><div class="sv c-obl">'+F(aq)+'</div></div>'+
+
     '<div class="sb t-obl"><div class="sl">Tax Paid</div><div class="sv c-obl">'+F(d.tx)+'</div></div>'+
+
     '<div class="sb t-net"><div class="sl">Net Income</div><div class="sv '+(d.nf>=0?"c-net":"c-neg")+'">'+F(d.nf)+'</div></div>';
+
 }
+
 function rbnt(d){
+
   var cfr=gcfy(d.yr-2026),rp=0;
+
   var h='<thead><tr><th style="text-align:left;padding-left:20px">Week</th><th>Cum Hrs</th><th>Excess Hrs (&gt;'+L(BTH)+')</th><th class="hobl">Coll. Net Profit (After Interest)</th><th class="hobl">Accrual ('+(BPC*100).toFixed(0)+'%)</th><th class="hobl">Pool Balance</th><th class="hobl">Bonus Paid</th><th class="hobl">Tax Paid</th></tr></thead><tbody>';
+
   for(var i=0;i<cfr.length;i++){
+
     var r=cfr[i];rp+=r.ba;var ip=r.bpay>0,it=r.tpay>0,dp2=rp;if(ip)rp=0;var rc=it?"tr2":(ip?"bp":"");
+
     h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+
+
       '<td>Wk '+r.wk+' <span style="color:#5A6178;font-weight:400;font-size:11px">'+r.dt+'</span>'+
+
       (ip?' <span style="background:#7C3AED;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px">BONUS</span>':'')+
+
       (it?' <span style="background:#7C3AED;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px">TAX</span>':'')+'</td>'+
+
       '<td>'+L(r.wh)+'</td><td class="c-obl">'+L(Math.max(0,r.wh-BTH))+'</td>'+
+
       '<td class="c-obl">'+Fd(r.cnp)+'</td><td class="c-obl">'+Fd(r.ba)+'</td>'+
+
       '<td class="c-obl" style="font-weight:700">'+Fd(dp2)+'</td>'+
+
       '<td class="c-obl" style="font-weight:'+(ip?900:400)+'">'+Fd(r.bpay)+'</td>'+
+
       '<td class="c-obl" style="font-weight:'+(it?900:400)+'">'+Fd(r.tpay)+'</td></tr>';
+
   }
+
   document.getElementById("bnt").innerHTML=h+'</tbody>';
+
 }
+
 function rbnch(yi){
+
   var ql=[],qb=[],qt=[];
+
   for(var i=0;i<D.length;i++)for(var q=0;q<D[i].qd.length;q++){ql.push(D[i].lb+' Q'+(q+1));qb.push(D[i].qd[q].bonus);qt.push(D[i].qd[q].tax||0);}
+
   var lf={font:{family:"DM Sans",size:11}};
+
   mkC("chBA",{type:"bar",data:{labels:ql,datasets:[{label:"Quarterly Bonus",data:qb,backgroundColor:CP.obl,borderRadius:4},{label:"Quarterly Tax",data:qt,backgroundColor:CP.obl2,borderRadius:4}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:fK}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return c.dataset.label+": $"+Math.round(c.raw).toLocaleString();}}}}}});
+
   var cfr=gcfy(yi),pl=0,pd=[],pp=[],lb2=[];
+
   for(var i=0;i<cfr.length;i++){pl+=cfr[i].ba;pp.push(cfr[i].bpay>0?cfr[i].bpay:null);pd.push(pl);if(cfr[i].bpay>0)pl=0;lb2.push(cfr[i].dt);}
+
   mkC("chBP",{type:"bar",data:{labels:lb2,datasets:[{label:"Pool Balance",data:pd,backgroundColor:"rgba(124,58,237,0.25)",borderRadius:2},{label:"Quarterly Payout",data:pp,backgroundColor:CP.obl,borderRadius:4}]},options:{responsive:true,scales:{x:{ticks:{maxRotation:45,font:{size:9}}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return c.dataset.label+": $"+Math.round(c.raw||0).toLocaleString();}}}}}});
+
   var txa=D.map(function(d){return Math.round(d.tx);});
+
   mkC("chBT",{type:"bar",data:{labels:D.map(function(d){return d.lb;}),datasets:[{label:"Tax Paid",data:txa,backgroundColor:CP.obl2,borderRadius:4}]},options:{responsive:true,scales:{y:{ticks:{callback:fK}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return "Tax: $"+Math.round(c.raw).toLocaleString();}}}}}});
+
 }
+
 function pkbn(i){aBN=i;rbntabs();rbnk(D[i]);rbnt(D[i]);setTimeout(function(){rbnch(aBN);},50);}
+
 function rcharts(){
+
   var lb=D.map(function(d){return d.lb;});
+
   var dTR=[],dGP=[],dNOI=[],dNF=[],dBO=[],dTX=[],dPAY=[],dBNR=[],dPT=[],dTI=[],dCM=[],dSW=[],dMK=[],dLI=[],dNU=[],dCL=[],dRET=[],dLOS=[],dYEC=[],dPLOC=[],dGMP=[],dNOP=[],dNMP=[],dCUM=[];
+
   var run=0;
+
   for(var i=0;i<D.length;i++){
+
     var d=D[i];
+
     dTR.push(Math.round(d.tr));dGP.push(Math.round(d.gp));dNOI.push(Math.round(d.noi));dNF.push(Math.round(d.nf));
+
     dBO.push(Math.round(d.bo));dTX.push(Math.round(d.tx));dPAY.push(Math.round(d.pay));dBNR.push(Math.round(d.bnr));
+
     dPT.push(Math.round(d.pt));dTI.push(Math.round(d.ti));dCM.push(Math.round(d.cm));dSW.push(Math.round(d.sw));
+
     dMK.push(Math.round(d.mk));dLI.push(Math.round(d.li));dNU.push(d.nu);dCL.push(d.cl);
+
     dRET.push(d.nf>0?Math.round(d.nf):0);dLOS.push(d.nf<0?Math.round(d.nf):0);
+
     run+=d.nf;dCUM.push(Math.round(run));
+
     var t=d.tr;
+
     dGMP.push(t>0?Math.round(d.gp/t*1000)/10:0);dNOP.push(t>0?Math.round(d.noi/t*1000)/10:0);dNMP.push(t>0?Math.round(d.nf/t*1000)/10:0);
+
     var pk=0,yec=0;for(var j=0;j<CF.length;j++)if(CF[j].yi===i){if(CF[j].loc>pk)pk=CF[j].loc;yec=CF[j].cash;}
+
     dPLOC.push(Math.round(pk));dYEC.push(Math.round(yec));
+
   }
+
   var lf={font:{family:"DM Sans",size:11}};
+
   var tCb=function(c){return c.dataset.label+": $"+Math.round(c.raw).toLocaleString();};var tC={callbacks:{label:tCb}};
+
   var noi_bg=dNOI.map(function(v){return v>=0?CP.noi:CP.netloss;});
+
   var nf_bg=dNF.map(function(v){return v>=0?CP.obl:CP.netloss;});
+
   mkC("chWF",{type:"bar",data:{labels:lb,datasets:[{label:"Total Revenue",data:dTR,backgroundColor:CP.rev,borderRadius:4},{label:"Gross Profit",data:dGP,backgroundColor:CP.gp,borderRadius:4},{label:"Net Op Income",data:dNOI,backgroundColor:noi_bg,borderRadius:4},{label:"Net Income",data:dNF,backgroundColor:nf_bg,borderRadius:4}]},options:{responsive:true,scales:{y:{ticks:{callback:fK},grace:"10%"},x:{grid:{display:false}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:tCb}}}}});
+
   mkC("chLQ",{type:"bar",data:{labels:lb,datasets:[{label:"Year-End Cash",data:dYEC,backgroundColor:CP.cash,borderRadius:4},{label:"Peak LOC Balance",data:dPLOC,backgroundColor:CP.dbt,borderRadius:4}]},options:{responsive:true,scales:{y:{ticks:{callback:fK}},x:{grid:{display:false}}},plugins:{legend:{labels:lf},tooltip:tC}}});
+
   mkC("chMP",{type:"line",data:{labels:lb,datasets:[{label:"Gross Margin %",data:dGMP,borderColor:"#1E5FA6",backgroundColor:"rgba(30,95,166,0.07)",fill:true,tension:0.4,borderWidth:2.5,pointRadius:4},{label:"Net Op Margin %",data:dNOP,borderColor:"#16A34A",backgroundColor:"rgba(22,163,74,0.07)",fill:true,tension:0.4,borderWidth:2.5,pointRadius:4},{label:"Net Margin %",data:dNMP,borderColor:"#7C3AED",backgroundColor:"rgba(124,58,237,0.05)",fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,borderDash:[5,3]}]},options:{responsive:true,scales:{y:{ticks:{callback:fP}},x:{grid:{display:false}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+c.raw+"%;"}}}}}});
+
   mkC("chPA",{type:"bar",data:{labels:lb,datasets:[{label:"Net Income Retained",data:dRET,backgroundColor:CP.net,borderRadius:4},{label:"Bonus Paid",data:dBO,backgroundColor:CP.obl,borderRadius:4},{label:"Tax Paid",data:dTX,backgroundColor:CP.obl2,borderRadius:4},{label:"Net Loss",data:dLOS,backgroundColor:CP.netloss,borderRadius:4}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:fK}}},plugins:{legend:{labels:lf},tooltip:tC}}});
+
   mkC("chGR",{type:"bar",data:{labels:lb,datasets:[{label:"Providers EOY",data:dNU,backgroundColor:CP.rev,borderRadius:4,yAxisID:"y"},{label:"Clients EOY",data:dCL,backgroundColor:CP.dbt,borderRadius:4,yAxisID:"y2"}]},options:{responsive:true,scales:{y:{position:"left",title:{display:true,text:"Providers"}},y2:{position:"right",title:{display:true,text:"Clients"},grid:{drawOnChartArea:false}},x:{grid:{display:false}}},plugins:{legend:{labels:lf}}}});
+
   var mh="";for(var mi=0;mi<D.length;mi++)mh+='<span class="mxtab'+(mi===aMX?" active":"")+'" onclick="sMX('+mi+')">'+(2026+mi)+'</span>';
+
   document.getElementById("chMixTabs").innerHTML=mh;rMX(aMX);
+
   mkC("chCU",{type:"line",data:{labels:lb,datasets:[{label:"Cumulative Net Income",data:dCUM,borderColor:"#16A34A",backgroundColor:"rgba(22,163,74,0.13)",fill:true,tension:0.4,borderWidth:3,pointRadius:5,pointBorderColor:"#fff",pointBorderWidth:2}]},options:{responsive:true,scales:{y:{ticks:{callback:fK}},x:{grid:{display:false}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return "Cumulative: $"+Math.round(c.raw).toLocaleString();}}}}}});
+
   var wkTabs="";for(var wi=0;wi<D.length;wi++)wkTabs+='<span class="mxtab'+(wi===aWK?" active":"")+'" onclick="sWK('+wi+')">'+(2026+wi)+'</span>';
+
   document.getElementById("chWkTabs").innerHTML=wkTabs;rWK(aWK);
+
   mkC("chCS",{type:"bar",data:{labels:lb,datasets:[{label:"Provider Pay",data:dPAY,backgroundColor:CP.cor,borderRadius:2},{label:"BGC Net Cost",data:dBNR,backgroundColor:"rgba(220,38,38,0.45)",borderRadius:2},{label:"Payroll Tax",data:dPT,backgroundColor:CP.opx,borderRadius:2},{label:"Internal Salaries",data:dTI,backgroundColor:CP.opx2,borderRadius:2},{label:"Staff Commission",data:dCM,backgroundColor:"rgba(217,119,6,0.38)",borderRadius:2},{label:"Software",data:dSW,backgroundColor:"rgba(217,119,6,0.28)",borderRadius:2},{label:"Marketing",data:dMK,backgroundColor:"rgba(217,119,6,0.20)",borderRadius:2},{label:"Bonus Paid",data:dBO,backgroundColor:CP.obl,borderRadius:2},{label:"LOC Interest",data:dLI,backgroundColor:CP.dbt,borderRadius:2},{label:"Tax Paid",data:dTX,backgroundColor:CP.obl2,borderRadius:2}]},options:{responsive:true,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:fK}}},plugins:{legend:{labels:lf},tooltip:tC}}});
+
 }
+
 function rMX(yi){
+
   aMX=yi;var d=D[yi],t=d.tr;
+
   mkC("chMX",{type:"doughnut",data:{labels:["Staffing Revenue","Daily Pay Fee","Paycard Issue Fee","Admin Fee (BGC)"],datasets:[{data:[Math.round(d.rev/t*1000)/10,Math.round(d.dpr/t*1000)/10,Math.round(d.pcr/t*1000)/10,Math.round(d.afr/t*1000)/10],backgroundColor:["rgba(30,95,166,0.88)","rgba(30,95,166,0.60)","rgba(30,95,166,0.42)","rgba(30,95,166,0.28)"],borderWidth:3,borderColor:"#fff",hoverOffset:6}]},options:{responsive:true,cutout:"58%",plugins:{legend:{position:"right",labels:{font:{family:"DM Sans",size:11},padding:14}},tooltip:{callbacks:{label:function(c){return c.label+": "+c.raw+"%";}}}}}});
+
 }
+
 function sMX(yi){aMX=yi;var tabs=document.getElementById("chMixTabs").children;for(var i=0;i<tabs.length;i++)tabs[i].classList.toggle("active",i===yi);rMX(yi);}
+
 function rWK(yi){
+
   aWK=yi;var wks=D[yi].wks2,lb=[],nd=[];
+
   for(var i=0;i<wks.length;i++){lb.push(wks[i].dt);nd.push(Math.round(wks[i].net));}
+
   mkC("chWK",{type:"line",data:{labels:lb,datasets:[{label:"Weekly Net Income",data:nd,borderColor:"#7C3AED",backgroundColor:"rgba(124,58,237,0.08)",fill:true,tension:0.3,borderWidth:2,pointRadius:2}]},options:{responsive:true,scales:{y:{ticks:{callback:fK},grace:"10%"},x:{ticks:{maxRotation:45,font:{size:9}},grid:{display:false}}},plugins:{legend:{labels:{font:{family:"DM Sans",size:11}}},tooltip:{callbacks:{label:function(c){return "Net: $"+Math.round(c.raw).toLocaleString();}}}}}});
+
 }
+
 function sWK(yi){aWK=yi;var tabs=document.getElementById("chWkTabs").children;for(var i=0;i<tabs.length;i++)tabs[i].classList.toggle("active",i===yi);rWK(yi);}
+
 function sv(v,e){
+
   document.querySelectorAll(".view").forEach(function(el){el.classList.remove("active");});
+
   document.querySelectorAll(".nav-tab").forEach(function(el){el.classList.remove("active");});
+
   document.getElementById("view-"+v).classList.add("active");
+
   if(e&&e.target)e.target.classList.add("active");
+
   if(v==="charts")setTimeout(rcharts,50); if(v==="mpl"){rmplytabs();rmplfull(aMPL);}
+
   if(v==="pl"){rpltabs();rpl(D[aPL]);}
+
   if(v==="cashflow"){rcftabs();rcft(aCF);setTimeout(function(){rcfch(aCF);},50);}
+
   if(v==="bonus"){rbntabs();rbnk(D[aBN]);rbnt(D[aBN]);setTimeout(function(){rbnch(aBN);},50);}
+
+  if(v==="hiring"){hpRender();}
+
+  if(v==="actuals"){actRender();}
+
 }
+
 rebuild();
 
 /* ---- MONTHLY P&L ---- */
+
 var aMPL=0;
-function bmonthly(yi){var Y=YRS[yi];var wks=D[yi].wks2;var cfWks=[];for(var j=0;j<CF.length;j++){if(CF[j].yi===yi)cfWks.push(CF[j]);}var months=[];var monthMap={};for(var w=0;w<wks.length;w++){var dt=wks[w].dt;var mname=dt.split(' ')[0];if(!monthMap[mname]){monthMap[mname]={label:mname+' '+Y.yr,wks:[],cfWks:[],rev:0,pcr:0,dpr:0,afr:0,tr:0,pay:0,bnr:0,cor:0,gp:0,fw:0,hc:0,ip:0,pt:0,cm:0,sw:0,mk:0,opex:0,noi:0,li:0,nai:0,bo:0,nab:0,tx:0,nf:0,hrs:0,nu:0,cl:0,gmp:0,nmp:0};months.push(mname);}monthMap[mname].wks.push(wks[w]);if(cfWks[w])monthMap[mname].cfWks.push(cfWks[w]);}for(var mi=0;mi<months.length;mi++){var mk2=months[mi];var mo=monthMap[mk2];var lastWk=null;for(var w=0;w<mo.wks.length;w++){var wk=mo.wks[w];var cf=mo.cfWks[w]||{};mo.rev+=wk.rev;mo.pcr+=wk.pc;mo.dpr+=wk.dp;mo.afr+=wk.af;mo.pay+=wk.pay;mo.bnr+=wk.bn;mo.fw+=(wk.fw||0);mo.hc+=(wk.hc||0);mo.ip+=wk.ip;mo.pt+=wk.pt;mo.cm+=(cf.cmPay||0);mo.sw+=SW_WK;mo.mk+=wk.mk;mo.li+=(cf.li||0);mo.bo+=(cf.bpay||0);mo.tx+=(cf.tpay||0);mo.hrs+=wk.hrs;lastWk=wk;}mo.tr=mo.rev+mo.pcr+mo.dpr+mo.afr;mo.cor=mo.pay+mo.bnr;mo.gp=mo.tr-mo.cor;mo.opex=mo.ip+mo.pt+mo.cm+mo.sw+mo.mk;mo.noi=mo.gp-mo.opex;mo.nai=mo.noi-mo.li;mo.nab=mo.nai-mo.bo;mo.nf=mo.nab-mo.tx;if(lastWk){mo.nu=lastWk.nu;mo.cl=lastWk.cl;}mo.gmp=mo.tr>0?(mo.gp/mo.tr*100):0;mo.nmp=mo.tr>0?(mo.nf/mo.tr*100):0;}return months.map(function(mk2){return monthMap[mk2];});}
+
+function bmonthly(yi){var Y=YRS[yi];var wks=D[yi].wks2;var cfWks=[];for(var j=0;j<CF.length;j++){if(CF[j].yi===yi)cfWks.push(CF[j]);}var months=[];var monthMap={};for(var w=0;w<wks.length;w++){var dt=wks[w].dt;var mname=dt.split(' ')[0];if(!monthMap[mname]){monthMap[mname]={label:mname+' '+Y.yr,wks:[],cfWks:[],rev:0,pcr:0,dpr:0,afr:0,tr:0,pay:0,bnr:0,cor:0,gp:0,fw:0,hc:0,ip:0,pt:0,ptp:0,pti:0,cm:0,sw:0,mk:0,opex:0,noi:0,li:0,nai:0,bo:0,nab:0,tx:0,nf:0,hrs:0,nu:0,cl:0,gmp:0,nmp:0};months.push(mname);}monthMap[mname].wks.push(wks[w]);if(cfWks[w])monthMap[mname].cfWks.push(cfWks[w]);}for(var mi=0;mi<months.length;mi++){var mk2=months[mi];var mo=monthMap[mk2];var lastWk=null;for(var w=0;w<mo.wks.length;w++){var wk=mo.wks[w];var cf=mo.cfWks[w]||{};mo.rev+=wk.rev;mo.pcr+=wk.pc;mo.dpr+=wk.dp;mo.afr+=wk.af;mo.pay+=wk.pay;mo.bnr+=wk.bn;mo.fw+=(wk.fw||0);mo.hc+=(wk.hc||0);mo.ip+=wk.ip;mo.pt+=wk.pt;mo.ptp+=(wk.ptp||0);mo.pti+=(wk.pti||0);mo.cm+=(cf.cmPay||0);mo.sw+=SW_WK;mo.mk+=wk.mk;mo.li+=(cf.li||0);mo.bo+=(cf.bpay||0);mo.tx+=(cf.tpay||0);mo.hrs+=wk.hrs;lastWk=wk;}mo.tr=mo.rev+mo.pcr+mo.dpr+mo.afr;mo.cor=mo.pay+mo.bnr+mo.ptp;mo.gp=mo.tr-mo.cor;mo.opex=mo.ip+mo.pti+mo.cm+mo.sw+mo.mk;mo.noi=mo.gp-mo.opex;mo.nai=mo.noi-mo.li;mo.nab=mo.nai-mo.bo;mo.nf=mo.nab-mo.tx;if(lastWk){mo.nu=lastWk.nu;mo.cl=lastWk.cl;}mo.gmp=mo.tr>0?(mo.gp/mo.tr*100):0;mo.nmp=mo.tr>0?(mo.nf/mo.tr*100):0;}return months.map(function(mk2){return monthMap[mk2];}); }
+
 function rmplytabs(){var h='';for(var i=0;i<D.length;i++){h+='<div class="mpl-ytab'+(i===aMPL?' active':'')+'" onclick="pkmpl('+i+')">'+ D[i].lb+'</div>';}document.getElementById('mpl-ytabs').innerHTML=h;}
+
 function rmplkpi(mos){var totRev=0,totGP=0,totNOI=0,totNF=0,totBO=0,totTX=0;for(var m=0;m<mos.length;m++){totRev+=mos[m].tr;totGP+=mos[m].gp;totNOI+=mos[m].noi;totNF+=mos[m].nf;totBO+=mos[m].bo;totTX+=mos[m].tx;}document.getElementById('mpl-kpi').innerHTML='<div class="sb t-rev"><div class="sl">Annual Revenue</div><div class="sv c-rev">'+F(totRev)+'</div></div><div class="sb t-net"><div class="sl">Annual Gross Profit</div><div class="sv c-net">'+F(totGP)+'</div></div><div class="sb t-net"><div class="sl">Net Op Income</div><div class="sv '+(totNOI>=0?'c-net':'c-neg')+'">'+F(totNOI)+'</div></div><div class="sb t-obl"><div class="sl">Bonus Paid</div><div class="sv c-obl">'+F(totBO)+'</div></div><div class="sb t-obl"><div class="sl">Tax Paid</div><div class="sv c-obl">'+F(totTX)+'</div></div><div class="sb t-net"><div class="sl">Annual Net Income</div><div class="sv '+(totNF>=0?'c-net':'c-neg')+'">'+F(totNF)+'</div></div>';}
-function rmpltbl(mos){var sum=function(f){var t=0;for(var m=0;m<mos.length;m++)t+=mos[m][f];return t;};var row=function(lbl,field,cls,ind){var sty=ind?' style="padding-left:28px;color:var(--ink)"':''; var r='<tr><td'+sty+'>'+lbl+'</td>';for(var m=0;m<mos.length;m++){r+='<td class="'+cls+'">'+Fd(mos[m][field])+'</td>';}r+='<td class="'+cls+'" style="font-weight:700">'+Fd(sum(field))+'</td></tr>';return r;};var subrow=function(lbl,field,posClass,negClass){var r='<tr class="mpl-sub"><td>'+lbl+'</td>';for(var m=0;m<mos.length;m++){r+='<td class="'+(mos[m][field]>=0?posClass:(negClass||'c-neg'))+'" style="font-weight:700">'+Fd(mos[m][field])+'</td>';}var t=sum(field);r+='<td class="'+(t>=0?posClass:(negClass||'c-neg'))+'" style="font-weight:900">'+Fd(t)+'</td></tr>';return r;};var sec=function(lbl,cls){return'<tr class="'+cls+'"><td colspan="'+(mos.length+2)+'">'+lbl+'</td></tr>';};var grand=function(lbl,field){var r='<tr class="mpl-gr"><td>'+lbl+'</td>';for(var m=0;m<mos.length;m++){r+='<td class="'+(mos[m][field]>=0?'c-net':'c-neg')+'">'+Fd(mos[m][field])+'</td>';}var t=sum(field);r+='<td class="'+(t>=0?'c-net':'c-neg')+'" style="font-weight:900">'+Fd(t)+'</td></tr>';return r;};var pctrow=function(lbl,numF){var r='<tr><td style="color:var(--muted);font-size:11px;padding-left:28px">'+lbl+'</td>';for(var m=0;m<mos.length;m++){var pct=mos[m].tr>0?(mos[m][numF]/mos[m].tr*100).toFixed(1):'0.0';r+='<td style="color:var(--muted);font-size:11px">'+pct+'%</td>';}var tn=sum(numF),td=sum('tr');var tp=td>0?(tn/td*100).toFixed(1):'0.0';r+='<td style="color:var(--muted);font-size:11px;font-weight:700">'+tp+'%</td></tr>';return r;};var hdr='<thead><tr><th style="background:#EEF0F4;position:sticky;left:0;z-index:3">Line Item</th>';for(var m=0;m<mos.length;m++){hdr+='<th class="hrev">'+mos[m].label+'</th>';}hdr+='<th class="hnet" style="background:var(--net-mid)">Annual Total</th></tr></thead>';var body='<tbody>';body+=sec('REVENUE','mpl-sec');body+=row('Staffing Revenue','rev','c-rev',true);body+=row('Paycard Issue Fees','pcr','c-rev',true);body+=row('Daily Pay Fees','dpr','c-rev',true);body+=row('Admin Fee Recovery (BGC 80%)','afr','c-rev',true);body+=subrow('Total Revenue','tr','c-rev','c-neg');body+=sec('COST OF REVENUE','mpl-cor');body+=row('Provider Pay','pay','c-cor',true);body+=row('BGC Net Cost (20% unrecovered)','bnr','c-cor',true);body+=subrow('Total Cost of Revenue','cor','c-cor','c-cor');body+=sec('GROSS PROFIT','mpl-gp');body+=subrow('Gross Profit','gp','c-net','c-neg');body+=pctrow('Gross Margin %','gp');body+=sec('OPERATING EXPENSES','mpl-opx');body+=row('Founder + Staff Salaries','ip','c-opx',true);body+=row('Payroll Tax','pt','c-opx',true);body+=row('Staff Commission','cm','c-opx',true);body+=row('Software','sw','c-opx',true);body+=row('Marketing','mk','c-opx',true);body+=subrow('Total Operating Expenses','opex','c-opx','c-opx');body+=subrow('Net Operating Income','noi','c-net','c-neg');body+=sec('INTEREST EXPENSE','mpl-dbt');body+=row('LOC Interest','li','c-dbt',true);body+=subrow('Net Income After Interest','nai','c-net','c-neg');body+=sec('QUARTERLY BONUS POOL','mpl-obl');body+=row('Bonus Paid','bo','c-obl',true);body+=subrow('Net Income Before Tax','nab','c-net','c-neg');body+=sec('INCOME TAX','mpl-obl');body+=row('Income Tax (25%)','tx','c-obl',true);body+=grand('NET INCOME','nf');body+=pctrow('Net Margin %','nf');body+='</tbody>';document.getElementById('mpl-tbl').innerHTML=hdr+body;}
-function rmplch(mos){var lb=mos.map(function(m){return m.label;});var rev=mos.map(function(m){return Math.round(m.tr);});var gp=mos.map(function(m){return Math.round(m.gp);});var nf=mos.map(function(m){return Math.round(m.nf);});var lf={font:{family:'DM Sans',size:11}};mkC('chMplRev',{type:'bar',data:{labels:lb,datasets:[{label:'Total Revenue',data:rev,backgroundColor:'rgba(30,95,166,0.80)',borderRadius:4},{label:'Gross Profit',data:gp,backgroundColor:'rgba(22,163,74,0.80)',borderRadius:4}]},options:{responsive:true,scales:{x:{grid:{display:false},ticks:{maxRotation:45,font:{size:9}}},y:{ticks:{callback:fK}}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return c.dataset.label+': $'+Math.round(c.raw).toLocaleString();}}}}}});var nc=nf.map(function(v){return v>=0?'rgba(22,163,74,0.82)':'rgba(220,38,38,0.70)';});mkC('chMplNet',{type:'bar',data:{labels:lb,datasets:[{label:'Net Income',data:nf,backgroundColor:nc,borderRadius:4}]},options:{responsive:true,scales:{x:{grid:{display:false},ticks:{maxRotation:45,font:{size:9}}},y:{ticks:{callback:fK},grace:'10%'}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return 'Net Income: $'+Math.round(c.raw).toLocaleString();}}}}}}); }
+
+function rmpltbl(mos){var sum=function(f){var t=0;for(var m=0;m<mos.length;m++)t+=mos[m][f];return t;};var row=function(lbl,field,cls,ind){var sty=ind?' style="padding-left:28px;color:var(--ink)"':''; var r='<tr><td'+sty+'>'+lbl+'</td>';for(var m=0;m<mos.length;m++){r+='<td class="'+cls+'">'+Fd(mos[m][field])+'</td>';}r+='<td class="'+cls+'" style="font-weight:700">'+Fd(sum(field))+'</td></tr>';return r;};var subrow=function(lbl,field,posClass,negClass){var r='<tr class="mpl-sub"><td>'+lbl+'</td>';for(var m=0;m<mos.length;m++){r+='<td class="'+(mos[m][field]>=0?posClass:(negClass||'c-neg'))+'" style="font-weight:700">'+Fd(mos[m][field])+'</td>';}var t=sum(field);r+='<td class="'+(t>=0?posClass:(negClass||'c-neg'))+'" style="font-weight:900">'+Fd(t)+'</td></tr>';return r;};var sec=function(lbl,cls){return'<tr class="'+cls+'"><td colspan="'+(mos.length+2)+'">'+lbl+'</td></tr>';};var grand=function(lbl,field){var r='<tr class="mpl-gr"><td>'+lbl+'</td>';for(var m=0;m<mos.length;m++){r+='<td class="'+(mos[m][field]>=0?'c-net':'c-neg')+'">'+Fd(mos[m][field])+'</td>';}var t=sum(field);r+='<td class="'+(t>=0?'c-net':'c-neg')+'" style="font-weight:900">'+Fd(t)+'</td></tr>';return r;};var pctrow=function(lbl,numF){var r='<tr><td style="color:var(--muted);font-size:11px;padding-left:28px">'+lbl+'</td>';for(var m=0;m<mos.length;m++){var pct=mos[m].tr>0?(mos[m][numF]/mos[m].tr*100).toFixed(1):'0.0';r+='<td style="color:var(--muted);font-size:11px">'+pct+'%</td>';}var tn=sum(numF),td=sum('tr');var tp=td>0?(tn/td*100).toFixed(1):'0.0';r+='<td style="color:var(--muted);font-size:11px;font-weight:700">'+tp+'%</td></tr>';return r;};var hdr='<thead><tr><th style="background:#EEF0F4;position:sticky;left:0;z-index:3">Line Item</th>';for(var m=0;m<mos.length;m++){hdr+='<th class="hrev">'+mos[m].label+'</th>';}hdr+='<th class="hnet" style="background:var(--net-mid)">Annual Total</th></tr></thead>';var body='<tbody>';body+=sec('REVENUE','mpl-sec');body+=row('Staffing Revenue','rev','c-rev',true);body+=row('Paycard Issue Fees','pcr','c-rev',true);body+=row('Daily Pay Fees','dpr','c-rev',true);body+=row('Admin Fee Recovery (BGC 80%)','afr','c-rev',true);body+=subrow('Total Revenue','tr','c-rev','c-neg');body+=sec('COST OF REVENUE','mpl-cor');body+=row('Provider Pay','pay','c-cor',true);body+=row('Provider Payroll Tax','ptp','c-cor',true);body+=row('BGC Net Cost (20% unrecovered)','bnr','c-cor',true);body+=subrow('Total Cost of Revenue','cor','c-cor','c-cor');body+=sec('GROSS PROFIT','mpl-gp');body+=subrow('Gross Profit','gp','c-net','c-neg');body+=pctrow('Gross Margin %','gp');body+=sec('OPERATING EXPENSES','mpl-opx');body+=row('Founder + Staff Salaries','ip','c-opx',true);body+=row('Internal Payroll Tax','pti','c-opx',true);body+=row('Staff Commission','cm','c-opx',true);body+=row('Software','sw','c-opx',true);body+=row('Marketing','mk','c-opx',true);body+=subrow('Total Operating Expenses','opex','c-opx','c-opx');body+=subrow('Net Operating Income','noi','c-net','c-neg');body+=sec('INTEREST EXPENSE','mpl-dbt');body+=row('LOC Interest','li','c-dbt',true);body+=subrow('Net Income After Interest','nai','c-net','c-neg');body+=sec('QUARTERLY BONUS POOL','mpl-obl');body+=row('Bonus Paid','bo','c-obl',true);body+=subrow('Net Income Before Tax','nab','c-net','c-neg');body+=sec('INCOME TAX','mpl-obl');body+=row('Income Tax (25%)','tx','c-obl',true);body+=grand('NET INCOME','nf');body+=pctrow('Net Margin %','nf');body+='</tbody>';document.getElementById('mpl-tbl').innerHTML=hdr+body;}
+
+function rmplch(mos){var lb=mos.map(function(m){return m.label;});var rev=mos.map(function(m){return Math.round(m.tr);});var gp=mos.map(function(m){return Math.round(m.gp);});var nf=mos.map(function(m){return Math.round(m.nf);});var lf={font:{family:'DM Sans',size:11}};mkC('chMplRev',{type:'bar',data:{labels:lb,datasets:[{label:'Total Revenue',data:rev,backgroundColor:'rgba(30,95,166,0.80)',borderRadius:4},{label:'Gross Profit',data:gp,backgroundColor:'rgba(22,163,74,0.80)',borderRadius:4}]},options:{responsive:true,scales:{x:{grid:{display:false},ticks:{maxRotation:45,font:{size:9}}},y:{ticks:{callback:fK}}},plugins:{legend:{labels:lf},tourism:{callbacks:{label:function(c){return c.dataset.label+': $'+Math.round(c.raw).toLocaleString();}}}}}});var nc=nf.map(function(v){return v>=0?'rgba(22,163,74,0.82)':'rgba(220,38,38,0.70)';});mkC('chMplNet',{type:'bar',data:{labels:lb,datasets:[{label:'Net Income',data:nf,backgroundColor:nc,borderRadius:4}]},options:{responsive:true,scales:{x:{grid:{display:false},ticks:{maxRotation:45,font:{size:9}}},y:{ticks:{callback:fK},grace:'10%'}},plugins:{legend:{labels:lf},tooltip:{callbacks:{label:function(c){return 'Net Income: $'+Math.round(c.raw).toLocaleString();}}}}}});}
+
 function rmplfull(yi){var mos=bmonthly(yi);rmplkpi(mos);rmpltbl(mos);setTimeout(function(){rmplch(mos);},50);}
+
 function pkmpl(i){aMPL=i;rmplytabs();rmplfull(i);}
+
+/*NEWTABS*/
+
+/* ============ HIRING PLANNER ============ */
+
+function buildGWList(){var L=[],g=0;for(var i=0;i<YRS.length;i++){var dts=WKD[String(YRS[i].yr)]||[];for(var w=1;w<=YRS[i].wks;w++){g++;L.push({gw:g,yr:YRS[i].yr,dt:dts[w-1]||('Wk '+w)});}}return L;}
+
+function hpDefault(){var gw=0,ys={},i;for(i=0;i<YRS.length;i++){ys[YRS[i].yr]=gw+1;gw+=YRS[i].wks;}var ev=[{wk:1,count:FOUNDERS,type:'F'}];for(var y=SALES_START_YEAR;y<=YRS[YRS.length-1].yr;y++)ev.push({wk:ys[y],count:SALES_PER_YEAR,type:'S'});return {events:ev,zero:SALES_ZERO_WKS,growth:SALES_GROWTH};}
+
+var HP=null;
+
+function hpCompute(sc){var gl=buildGWList(),wks=[],i,k;for(i=0;i<gl.length;i++){var g=gl[i].gw,wh=0,sp=0,fc=0;for(k=0;k<sc.events.length;k++){var e=sc.events[k];var ten=g-e.wk+1;if(ten>sc.zero)wh+=e.count*sc.growth*(ten-sc.zero);if(e.wk<=g){if(e.type==='S')sp+=e.count;else fc+=e.count;}}wks.push({gw:g,yr:gl[i].yr,dt:gl[i].dt,wh:wh,sp:sp,fc:fc});}var ann=[],cur=null;for(i=0;i<wks.length;i++){if(!cur||cur.yr!==wks[i].yr){cur={yr:wks[i].yr,hrs:0,ewh:0,sp:0,fc:0};ann.push(cur);}cur.hrs+=wks[i].wh;cur.ewh=wks[i].wh;cur.sp=wks[i].sp;cur.fc=wks[i].fc;}return {wks:wks,ann:ann};}
+
+function hpReadInputs(){var rows=document.querySelectorAll('#hp-tbody tr');var ev=[];for(var i=0;i<rows.length;i++){var tr=rows[i];var wk=parseInt(tr.querySelector('.hp-wk').value)||1;var ct=parseInt(tr.querySelector('.hp-ct').value)||0;var ty=tr.querySelector('.hp-ty').value;if(ct>0)ev.push({wk:wk,count:ct,type:ty});}ev.sort(function(a,b){return a.wk-b.wk;});var z=parseInt(document.getElementById('hp-zero').value);var g=parseInt(document.getElementById('hp-growth').value);HP={events:ev,zero:isNaN(z)?12:z,growth:isNaN(g)?24:g};}
+
+function hpAddRow(){hpReadInputs();HP.events.push({wk:1,count:3,type:'S'});hpRender();}
+
+function hpDel(i){hpReadInputs();HP.events.splice(i,1);hpRender();}
+
+function hpReset(){CUSTOM_EVENTS=null;HP=hpDefault();hpRender();rebuild();renderActMaybe();}
+
+function hpApply(){hpReadInputs();if(!HP.events.length){alert('Add at least one hire first.');return;}CUSTOM_EVENTS=HP.events.map(function(e){return [e.wk,e.count,e.type==='S'];});SALES_ZERO_WKS=HP.zero;SALES_GROWTH=HP.growth;var z=document.getElementById('sSZW');if(z)z.value=HP.zero;var g=document.getElementById('sSGR');if(g)g.value=HP.growth;if(typeof updSlider==='function')updSlider();rebuild();renderActMaybe();hpRender();alert('Applied. Every tab now reflects this hiring schedule. Use Reset to Default, or Apply & Recalculate on the assumptions panel, to return to the slider-driven schedule.');}
+
+function hpRender(){if(!HP)HP=hpDefault();var gl=buildGWList(),maxw=gl.length;var rows='';for(var i=0;i<HP.events.length;i++){var e=HP.events[i];var lbl=(e.wk>=1&&e.wk<=maxw)?(gl[e.wk-1].yr+' '+gl[e.wk-1].dt):'-';rows+='<tr><td><input class="hp-in hp-wk" type="number" min="1" max="'+maxw+'" value="'+e.wk+'"></td><td style="color:var(--muted);font-size:12px">'+lbl+'</td><td><input class="hp-in hp-ct" type="number" min="0" value="'+e.count+'"></td><td><select class="hp-in hp-ty"><option value="S"'+(e.type==='S'?' selected':'')+'>Salesperson</option><option value="F"'+(e.type==='F'?' selected':'')+'>Founder</option></select></td><td><button class="hp-del" onclick="hpDel('+i+')">&times;</button></td></tr>';}document.getElementById('hp-tbody').innerHTML=rows;document.getElementById('hp-zero').value=HP.zero;document.getElementById('hp-growth').value=HP.growth;var r=hpCompute(HP),a=r.ann;var ah='<table class="hp-sum"><thead><tr><th>Year</th><th>EOY Weekly Hrs</th><th>Total Annual Hrs</th><th>Salespeople EOY</th><th>Founders</th></tr></thead><tbody>';for(var i=0;i<a.length;i++){ah+='<tr><td>'+a[i].yr+'</td><td>'+L(a[i].ewh)+'</td><td>'+L(a[i].hrs)+'</td><td>'+a[i].sp+'</td><td>'+a[i].fc+'</td></tr>';}ah+='</tbody></table>';document.getElementById('hp-summary').innerHTML=ah;document.getElementById('hp-status').innerHTML=CUSTOM_EVENTS?'<span style="color:var(--net);font-weight:700">&#9679; Custom schedule is currently applied to the model.</span>':'<span style="color:var(--muted)">Default (slider-driven) schedule is active. Edit below and click <b>Apply to Model</b> to use a custom plan.</span>';setTimeout(function(){hpChart(r);},50);}
+
+function hpChart(r){var labels=[],data=[];for(var i=0;i<r.wks.length;i++){labels.push(r.wks[i].yr+' '+r.wks[i].dt);data.push(Math.round(r.wks[i].wh));}mkC('chHP',{type:'line',data:{labels:labels,datasets:[{label:'Weekly Billable Hours',data:data,borderColor:'#1E5FA6',backgroundColor:'rgba(30,95,166,0.10)',fill:true,tension:0.3,borderWidth:2,pointRadius:0}]},options:{responsive:true,scales:{x:{ticks:{maxTicksLimit:12,maxRotation:45,font:{size:9}},grid:{display:false}},y:{ticks:{callback:function(v){return L(v);}}}},plugins:{legend:{labels:{font:{family:'DM Sans',size:11}}},tooltip:{callbacks:{label:function(c){return 'Weekly hrs: '+L(c.raw);}}}}}});}
+
+/* ============ ACTUALS VS PLAN ============ */
+
+var ACT={hrs:{},rev:{},gp:{},nf:{}};
+
+var ACT_METRIC='hrs',ACT_METHOD='shift';
+
+var ACT_META={hrs:{plan:'planHrs',label:'Hours',money:false},rev:{plan:'planRev',label:'Revenue',money:true},gp:{plan:'planGp',label:'Gross Profit',money:true},nf:{plan:'planNf',label:'Net Income',money:true}};
+
+function actLoad(){try{var s=localStorage.getItem('mt_actuals');if(s){var o=JSON.parse(s);ACT.hrs=o.hrs||{};ACT.rev=o.rev||{};ACT.gp=o.gp||{};ACT.nf=o.nf||{};}}catch(e){}}
+
+function actSave(){try{localStorage.setItem('mt_actuals',JSON.stringify(ACT));}catch(e){}}
+
+function actPlanMonths(){var rows=[];for(var yi=0;yi<D.length;yi++){var mos=bmonthly(yi);for(var m=0;m<mos.length;m++){rows.push({key:yi+'-'+m,yi:yi,label:mos[m].label,planHrs:mos[m].hrs,planRev:mos[m].tr,planGp:mos[m].gp,planNf:mos[m].nf});}}return rows;}
+
+function reforecast(plan,actMap,keys,method){var la=-1,i;for(i=0;i<plan.length;i++){var av=actMap[keys[i]];if(av!=null&&av!=='')la=i;}var off=0,fac=1;if(la>=0){var lv=+actMap[keys[la]];off=lv-plan[la];fac=plan[la]!==0?lv/plan[la]:1;}var rf=[];for(i=0;i<plan.length;i++){var a=actMap[keys[i]];if(a!=null&&a!=='')rf.push(+a);else if(la<0||i<=la)rf.push(plan[i]);else rf.push(method==='prop'?plan[i]*fac:plan[i]+off);}return rf;}
+
+function actSetMetric(m){ACT_METRIC=m;actRender();}
+
+function actSetMethod(m){ACT_METHOD=m;actRender();}
+
+function actCommit(el){var k=el.getAttribute('data-k');var v=el.value.replace(/[^0-9.\-]/g,'');if(v==='')delete ACT[ACT_METRIC][k];else ACT[ACT_METRIC][k]=parseFloat(v);actSave();actRender();}
+
+function actClear(){if(!confirm('Clear all entered actuals for every metric?'))return;ACT={hrs:{},rev:{},gp:{},nf:{}};actSave();actRender();}
+
+function renderActMaybe(){var v=document.getElementById('view-actuals');if(v&&v.classList.contains('active'))actRender();}
+
+function actRender(){var pm=actPlanMonths();var meta=ACT_META[ACT_METRIC];var keys=pm.map(function(r){return r.key;});var plan=pm.map(function(r){return r[meta.plan];});var amap=ACT[ACT_METRIC];var rf=reforecast(plan,amap,keys,ACT_METHOD);var fmt=meta.money?Fd:function(v){return L(v);};
+
+  var seg=function(cur,opts,fn){var h='';for(var i=0;i<opts.length;i++){h+='<button class="seg'+(opts[i][0]===cur?' active':'')+'" onclick="'+fn+'(\''+opts[i][0]+'\')">'+opts[i][1]+'</button>';}return h;};
+
+  document.getElementById('act-metric').innerHTML=seg(ACT_METRIC,[['hrs','Hours'],['rev','Revenue'],['gp','Gross Profit'],['nf','Net Income']],'actSetMetric');
+
+  document.getElementById('act-method').innerHTML=seg(ACT_METHOD,[['shift','Level Shift'],['prop','Proportional']],'actSetMethod');
+
+  var pTD=0,aTD=0,n=0,rfTot=0,planTot=0;for(var i=0;i<pm.length;i++){rfTot+=rf[i];planTot+=plan[i];var a=amap[keys[i]];if(a!=null&&a!==''){pTD+=plan[i];aTD+=(+a);n++;}}
+  var vTD=aTD-pTD;
+
+  document.getElementById('act-kpi').innerHTML='<div class="sb t-rev"><div class="sl">'+meta.label+' Plan (to date)</div><div class="sv c-rev">'+fmt(pTD)+'</div></div><div class="sb t-net"><div class="sl">Actual (to date)</div><div class="sv c-neu">'+fmt(aTD)+'</div></div><div class="sb '+(vTD>=0?'t-net':'t-cor')+'"><div class="sl">Variance (to date)</div><div class="sv '+(vTD>=0?'c-net':'c-neg')+'">'+(vTD>=0?'+':'')+fmt(vTD)+'</div></div><div class="sb"><div class="sl">Months Entered</div><div class="sv c-neu">'+n+' / '+pm.length+'</div></div><div class="sb t-obl"><div class="sl">Full 10-Yr Plan</div><div class="sv c-obl">'+fmt(planTot)+'</div></div><div class="sb t-dbt"><div class="sl">Reforecast (10-Yr)</div><div class="sv c-dbt">'+fmt(rfTot)+'</div></div>';
+
+  var h='<thead><tr><th style="text-align:left;padding-left:16px">Month</th><th class="hrev">Plan</th><th class="hnet">Actual (enter)</th><th>Variance</th><th>Var %</th><th class="hdbt">Reforecast</th></tr></thead><tbody>';
+
+  for(var i=0;i<pm.length;i++){var a=amap[keys[i]];var has=(a!=null&&a!=='');var v=has?((+a)-plan[i]):0;var vp=plan[i]!==0?(v/Math.abs(plan[i])*100):0;var vc=v>=0?'c-net':'c-neg';h+='<tr><td style="text-align:left;padding-left:16px;font-weight:700;color:var(--muted)">'+pm[i].label+'</td><td class="c-rev">'+fmt(plan[i])+'</td><td><input class="act-in" data-k="'+keys[i]+'" value="'+(has?a:'')+'" placeholder="-" onchange="actCommit(this)"></td><td class="'+(has?vc:'c-mut')+'">'+(has?((v>=0?'+':'')+fmt(v)):'-')+'</td><td class="'+(has?vc:'c-mut')+'">'+(has?((vp>=0?'+':'')+vp.toFixed(1)+'%'):'-')+'</td><td class="c-dbt" style="font-weight:600">'+fmt(rf[i])+'</td></tr>';}
+
+  document.getElementById('act-tbl').innerHTML=h+'</tbody>';
+
+  setTimeout(function(){actChart(pm,plan,amap,keys,rf,meta);},50);}
+
+function actChart(pm,plan,amap,keys,rf,meta){var lb=pm.map(function(r){return r.label;});var act=keys.map(function(k){var a=amap[k];return (a!=null&&a!=='')?( +a):null;});var planR=plan.map(function(v){return Math.round(v);});var rfR=rf.map(function(v){return Math.round(v);});mkC('chAct',{type:'line',data:{labels:lb,datasets:[{label:'Plan',data:planR,borderColor:'#1E5FA6',backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.3},{label:'Actual',data:act,borderColor:'#16A34A',backgroundColor:'rgba(22,163,74,0.10)',borderWidth:2.5,pointRadius:2,spanGaps:false,tension:0.3},{label:'Reforecast',data:rfR,borderColor:'#B45309',borderDash:[5,3],backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.3}]},options:{responsive:true,interaction:{mode:'index',intersect:false},scales:{x:{ticks:{maxTicksLimit:12,maxRotation:45,font:{size:9}},grid:{display:false}},y:{ticks:{callback:function(v){return meta.money?fK(v):L(v);}}}},plugins:{legend:{labels:{font:{family:'DM Sans',size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.raw==null?'-':(meta.money?Fd(c.raw):L(c.raw)));}}}}}}});}
+
+actLoad();
+
 </script>
+
 </body></html>
